@@ -18,5 +18,4 @@ public class PublishNewsCommand implements Command<NewsFeed> {
         feed.publish(channel, news);
         return "OK";
     }
- 
-}
+ }

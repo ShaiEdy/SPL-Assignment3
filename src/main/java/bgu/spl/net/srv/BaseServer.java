@@ -31,11 +31,11 @@ public abstract class BaseServer<T> implements Server<T> {
         try (ServerSocket serverSock = new ServerSocket(port)) {
 			System.out.println("Server started");
 
-            this.sock = serverSock; //just to be able to close
+            this.sock = serverSock; //just to be able to close (the close is to sock)
 
             while (!Thread.currentThread().isInterrupted()) {
 
-                Socket clientSock = serverSock.accept();
+                Socket clientSock = serverSock.accept(); //wait till a client connect with the server
 
                 BlockingConnectionHandler<T> handler = new BlockingConnectionHandler<>(
                         clientSock,
@@ -47,7 +47,7 @@ public abstract class BaseServer<T> implements Server<T> {
         } catch (IOException ex) {
         }
 
-        System.out.println("server closed!!!");
+        System.out.println("server closed!!!"); //when someone command me to close (interrupted)
     }
 
     @Override
