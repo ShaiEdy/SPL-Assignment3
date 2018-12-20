@@ -2,20 +2,19 @@ package bgu.spl.net.api.bidi;
 
 import bgu.spl.net.srv.BlockingConnectionHandler;
 
-import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ConnectionsImpl <T> implements Connections<T> {
-    ConcurrentHashMap<Integer,BlockingConnectionHandler> connectionHandlerConcurrentHashMap;
+    ConcurrentHashMap<Integer,BlockingConnectionHandler> idToConnectionHandler;
 
     public ConnectionsImpl() {
-        this.connectionHandlerConcurrentHashMap = new ConcurrentHashMap<>();
+        this.idToConnectionHandler = new ConcurrentHashMap<>();
     }
 
     @Override
     public boolean send(int connectionId, Object msg) {
-        BlockingConnectionHandler client= connectionHandlerConcurrentHashMap.get(connectionId);
-        client.send(msg); //todo- implement send of BlockingConnectionHandler
+        BlockingConnectionHandler CH= idToConnectionHandler.get(connectionId);
+        CH.send(msg); //todo- implement send of BlockingConnectionHandler
 
         return false; //todo- think how to know if the send succeed or not
     }
