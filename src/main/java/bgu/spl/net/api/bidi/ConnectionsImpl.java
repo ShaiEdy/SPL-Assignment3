@@ -7,7 +7,7 @@ import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ConnectionsImpl <T> implements Connections<T> {
-    ConcurrentHashMap<Integer,BlockingConnectionHandler> idToConnectionHandler;
+    private ConcurrentHashMap<Integer,BlockingConnectionHandler> idToConnectionHandler;
 
     public ConnectionsImpl() {
         this.idToConnectionHandler = new ConcurrentHashMap<>();
