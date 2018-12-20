@@ -13,6 +13,10 @@ public class ConnectionsImpl <T> implements Connections<T> {
         this.idToConnectionHandler = new ConcurrentHashMap<>();
     }
 
+    public void addNewConnection(int connectionId, BlockingConnectionHandler BlockingCH) {
+        idToConnectionHandler.put(connectionId, BlockingCH);
+    }
+
     @Override
     //send the msg to the CH with the given id
     public boolean send(int connectionId, T msg) {
