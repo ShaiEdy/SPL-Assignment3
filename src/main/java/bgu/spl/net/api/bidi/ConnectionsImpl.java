@@ -1,5 +1,6 @@
 package bgu.spl.net.api.bidi;
 
+import bgu.spl.net.api.Customer;
 import bgu.spl.net.srv.BlockingConnectionHandler;
 
 import java.util.Set;
@@ -7,10 +8,11 @@ import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ConnectionsImpl <T> implements Connections<T> {
-    private ConcurrentHashMap<Integer,BlockingConnectionHandler> idToConnectionHandler;
-
+    private ConcurrentHashMap<Integer,BlockingConnectionHandler> idToConnectionHandler; //all the clients that connected to the server
+    private ConcurrentHashMap<Integer, Customer> idToCustomer;
     public ConnectionsImpl() {
         this.idToConnectionHandler = new ConcurrentHashMap<>();
+        this.idToCustomer= new ConcurrentHashMap<>(); //  todo  delete the comment- need to be added here when someone do register
     }
 
     public void addNewConnection(int connectionId, BlockingConnectionHandler BlockingCH) {

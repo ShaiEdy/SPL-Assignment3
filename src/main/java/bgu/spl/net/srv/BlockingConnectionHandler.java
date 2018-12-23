@@ -52,7 +52,7 @@ public class BlockingConnectionHandler<T> implements Runnable, ConnectionHandler
     @Override
     public void send(T msg) {
         try {
-            out.write(encdec.encode(msg));
+            out.write(encdec.encode(msg)); //write to the CH outputStream
             out.flush();
         } catch (IOException e) {
             e.printStackTrace();

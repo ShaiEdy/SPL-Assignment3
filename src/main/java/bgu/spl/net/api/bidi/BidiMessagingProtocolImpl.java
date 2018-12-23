@@ -2,7 +2,6 @@ package bgu.spl.net.api.bidi;
 
 import bgu.spl.net.impl.messages.*;
 
-import java.lang.reflect.Array;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol<T> {
@@ -35,8 +34,8 @@ public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol<T> {
         return shouldTerminate;
     }
 
-    private Message convertStringToMessage (byte[] messageArray) {
-        short opcode = bytesToShort(messageArray);
+    private Message convertStringToMessage (byte[] messageArray) {//todo maybe remove to encdec
+        /*short opcode = bytesToShort(messageArray);
         if (opcode==0) return new RegisterMessage(messageArray);
         else if (opcode==1) return new LogInMessage(messageArray);
         else if (opcode==2) return new LogOutMessage(messageArray);
@@ -45,7 +44,8 @@ public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol<T> {
         else if (opcode==5) return new PMMessage(messageArray);
         else if (opcode==6) return new UserListMessage(messageArray);
         else if(opcode==7) return new StatMessage(messageArray);
-        else return null;
+        */
+         return null; //todo- add else before the return null
     }
 
 

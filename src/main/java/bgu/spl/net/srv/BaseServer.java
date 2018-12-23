@@ -7,6 +7,7 @@ import bgu.spl.net.api.bidi.BidiMessagingProtocol;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.function.Supplier;
 
 public abstract class BaseServer<T> implements Server<T> {
@@ -39,7 +40,7 @@ public abstract class BaseServer<T> implements Server<T> {
 
                 Socket clientSock = serverSock.accept(); //wait till a client connect with the server
 
-                BlockingConnectionHandler<T> handler= new BlockingConnectionHandler<>(
+                BlockingConnectionHandler<T> handler= new BlockingConnectionHandler<>( //kind of creating customer
                         clientSock,
                         encdecFactory.get(),
                         bidiProtocolFactory.get());
