@@ -1,5 +1,9 @@
 package bgu.spl.net.api.bidi;
 
+import bgu.spl.net.impl.messages.Message;
+import bgu.spl.net.impl.messages.RegisterMessage;
+
+import java.lang.reflect.Array;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol<T> {
@@ -30,5 +34,22 @@ public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol<T> {
     @Override
     public boolean shouldTerminate() {
         return shouldTerminate;
+    }
+
+    private Message convertStringToMessage (byte[] messageArray) {
+        short opcode = bytesToShort(messageArray);
+        if (opcode==0) return  (Message) new RegisterMessage();
+    }
+
+
+    /**
+     * @param byteArr- array of bytes represents the message
+     * @return short represent by the two first byte of the array
+     */
+    private short bytesToShort(byte[] byteArr)
+    {
+        short result = (short)((byteArr[0] & 0xff) << 8);
+        result += (short)(byteArr[1] & 0xff);
+        return result;
     }
 }
