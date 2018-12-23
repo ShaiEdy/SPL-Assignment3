@@ -1,4 +1,8 @@
 package bgu.spl.net.impl.messages;
 
-public class RegisterMessage {
+public class RegisterMessage<T> implements Message<T> {
+    @Override
+    public T act(T message) {
+        return null;
+    }
 }

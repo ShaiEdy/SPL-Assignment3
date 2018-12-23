@@ -1,5 +1,6 @@
 package bgu.spl.net.api.bidi;
 
+import bgu.spl.net.impl.messages.LogInMessage;
 import bgu.spl.net.impl.messages.Message;
 import bgu.spl.net.impl.messages.RegisterMessage;
 
@@ -38,8 +39,10 @@ public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol<T> {
 
     private Message convertStringToMessage (byte[] messageArray) {
         short opcode = bytesToShort(messageArray);
-        if (opcode==0) return  (Message) new RegisterMessage();
+        if (opcode==0) return new RegisterMessage();
+        if (opcode==1) return new LogInMessage();
     }
+
 
 
     /**
