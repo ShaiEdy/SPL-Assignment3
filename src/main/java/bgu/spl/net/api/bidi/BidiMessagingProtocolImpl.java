@@ -41,6 +41,7 @@ public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol<T> {
         short opcode = bytesToShort(messageArray);
         if (opcode==0) return new RegisterMessage();
         if (opcode==1) return new LogInMessage();
+    //
     }
 
 
