@@ -31,6 +31,7 @@ public abstract class BaseServer<T> implements Server<T> {
 		this.sock = null;
 		this.connections = new ConnectionsImpl();
 		this.connectionID = 0;
+		//k
     }
 
     @Override
