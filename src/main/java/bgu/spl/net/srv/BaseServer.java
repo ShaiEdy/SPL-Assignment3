@@ -3,6 +3,8 @@ package bgu.spl.net.srv;
 import bgu.spl.net.api.MessageEncoderDecoder;
 import bgu.spl.net.api.MessagingProtocol;
 import bgu.spl.net.api.bidi.BidiMessagingProtocol;
+import bgu.spl.net.api.bidi.Connections;
+import bgu.spl.net.api.bidi.ConnectionsImpl;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -15,6 +17,8 @@ public abstract class BaseServer<T> implements Server<T> {
     private final Supplier<BidiMessagingProtocol<T>> bidiProtocolFactory; //todo tell shai
     private final Supplier<MessageEncoderDecoder<T>> encdecFactory;
     private ServerSocket sock;
+    private ConnectionsImpl connections;
+    private int connectionID; //Unique ID for each customer.
 
     public BaseServer(
             int port,
@@ -25,6 +29,8 @@ public abstract class BaseServer<T> implements Server<T> {
         this.bidiProtocolFactory = bidiprotocolFactory;
         this.encdecFactory = encdecFactory;
 		this.sock = null;
+		this.connections = new ConnectionsImpl();
+		this.connectionID = 0;
     }
 
     @Override
@@ -39,11 +45,14 @@ public abstract class BaseServer<T> implements Server<T> {
 
                 Socket clientSock = serverSock.accept(); //wait till a client connect with the server
 
-                BlockingConnectionHandler<T> handler= new BlockingConnectionHandler<>(
+                BlockingConnectionHandler<T> handler= new BlockingConnectionHandler<>( //kind of creating customer.
                         clientSock,
                         encdecFactory.get(),
                         bidiProtocolFactory.get());
                 execute(handler);
+
+                connections.addNewConnection(connectionID,handler);
+                connectionID++;
             }
         } catch (IOException ex) {
         }
