@@ -1,8 +1,6 @@
 package bgu.spl.net.api.bidi;
 
-import bgu.spl.net.impl.messages.LogInMessage;
-import bgu.spl.net.impl.messages.Message;
-import bgu.spl.net.impl.messages.RegisterMessage;
+import bgu.spl.net.impl.messages.*;
 
 import java.lang.reflect.Array;
 import java.util.concurrent.ConcurrentHashMap;
@@ -39,9 +37,15 @@ public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol<T> {
 
     private Message convertStringToMessage (byte[] messageArray) {
         short opcode = bytesToShort(messageArray);
-        if (opcode==0) return new RegisterMessage();
-        if (opcode==1) return new LogInMessage();
-    //
+        if (opcode==0) return new RegisterMessage(messageArray);
+        else if (opcode==1) return new LogInMessage(messageArray);
+        else if (opcode==2) return new LogOutMessage(messageArray);
+        else if (opcode==3) return new FollowMessage(messageArray);
+        else if (opcode==4) return new PostMessage(messageArray);
+        else if (opcode==5) return new PMMessage(messageArray);
+        else if (opcode==6) return new UserListMessage(messageArray);
+        else if(opcode==7) return new StatMessage(messageArray);
+        else return null;
     }
 
 
