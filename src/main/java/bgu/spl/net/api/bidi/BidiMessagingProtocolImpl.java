@@ -21,6 +21,7 @@ public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol<T> {
 
     @Override
     public void process(T message) { //todo we want to make a message object which has field of short and field of string
+
     }
 
     /**
