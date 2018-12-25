@@ -1,6 +1,6 @@
 package bgu.spl.net.impl.messages;
 
-public class AckMessage<T> implements Message<T>{
+public class AckMessage<T> extends Message<T>{
 
 
     @Override
