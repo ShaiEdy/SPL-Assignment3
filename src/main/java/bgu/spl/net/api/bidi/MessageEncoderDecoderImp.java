@@ -50,21 +50,28 @@ public class MessageEncoderDecoderImp<T> implements MessageEncoderDecoder<T> { /
                 //todo write this
             }
             if (opcode==3){ //unregister is only the opcode
-                newMessage=(T)new LogOutMessage<T>(bytes); //todo check the T
-                popMessage();
+                Message message = new LogOutMessage(bytes);
+                resolve((T) message);
+                return popMessage();
             }
             if (opcode==4){
                 //todo its follow and its shit... for tomorrow
             }
             if (opcode==5){
                 if (nextByte == '\0') {
-                newMessage= (T)new PostMessage<>(bytes);
-                popMessage();
+                    Message message = new PostMessage(bytes);
+                    resolve((T) message);
+                    popMessage();
                 }
             } //todo to be continue
 
         }
     return null; //will return null only if the message was not completed
+    }
+
+    private void resolve (T message){
+        this.newMessage = message;
+        isMessage = true;
     }
     private T popMessage(){
         isMessage= true;

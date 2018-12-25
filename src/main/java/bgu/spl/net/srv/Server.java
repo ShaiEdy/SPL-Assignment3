@@ -26,7 +26,7 @@ public interface Server<T> extends Closeable {
     public static <T> Server<T>  threadPerClient(
             int port,
             Supplier<BidiMessagingProtocol<T>> protocolFactory,
-            Supplier<MessageEncoderDecoder<Message>> encoderDecoderFactory) {
+            Supplier<MessageEncoderDecoder<T>> encoderDecoderFactory) {
 
         return new BaseServer<T>(port, protocolFactory, encoderDecoderFactory) {
             @Override

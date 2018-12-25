@@ -16,7 +16,7 @@ public abstract class BaseServer<T> implements Server<T> {
 
     private final int port;
     private final Supplier<BidiMessagingProtocol<T>> bidiProtocolFactory;
-    private final Supplier<MessageEncoderDecoder<Message>> encdecFactory;// todo check if its ok you have here Message instade of T
+    private final Supplier<MessageEncoderDecoder<T>> encdecFactory;// todo check if its ok you have here Message instade of T
     private ServerSocket sock;
     private ConnectionsImpl connections;
     private int connectionID; //Unique ID for each customer.
@@ -24,7 +24,7 @@ public abstract class BaseServer<T> implements Server<T> {
     public BaseServer(
             int port,
             Supplier<BidiMessagingProtocol<T>> bidiprotocolFactory,
-            Supplier<MessageEncoderDecoder<Message>> encdecFactory) {
+            Supplier<MessageEncoderDecoder<T>> encdecFactory) {
         this.port = port;
         this.bidiProtocolFactory = bidiprotocolFactory;
         this.encdecFactory = encdecFactory;

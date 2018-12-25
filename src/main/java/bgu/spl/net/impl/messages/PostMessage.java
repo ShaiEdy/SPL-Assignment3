@@ -1,7 +1,7 @@
 package bgu.spl.net.impl.messages;
 
 public class PostMessage<T> extends Message<T> {
-    public PostMessage(T bytes) {
+    public PostMessage(byte[] bytes) {
     }
 
     @Override
