@@ -14,7 +14,6 @@ public class RegisterMessage<T> extends Message<T> {
         }
 
         for (int i = 2; i < arrayLength; i++) {
-
         }
     }
 

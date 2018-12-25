@@ -5,6 +5,7 @@ import bgu.spl.net.api.MessagingProtocol;
 import bgu.spl.net.api.bidi.BidiMessagingProtocol;
 import bgu.spl.net.api.bidi.Connections;
 import bgu.spl.net.api.bidi.ConnectionsImpl;
+import bgu.spl.net.impl.messages.Message;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -14,8 +15,8 @@ import java.util.function.Supplier;
 public abstract class BaseServer<T> implements Server<T> {
 
     private final int port;
-    private final Supplier<BidiMessagingProtocol<T>> bidiProtocolFactory; //todo tell shai
-    private final Supplier<MessageEncoderDecoder<T>> encdecFactory;
+    private final Supplier<BidiMessagingProtocol<T>> bidiProtocolFactory;
+    private final Supplier<MessageEncoderDecoder<Message>> encdecFactory;// todo check if its ok you have here Message instade of T
     private ServerSocket sock;
     private ConnectionsImpl connections;
     private int connectionID; //Unique ID for each customer.
@@ -23,15 +24,13 @@ public abstract class BaseServer<T> implements Server<T> {
     public BaseServer(
             int port,
             Supplier<BidiMessagingProtocol<T>> bidiprotocolFactory,
-            Supplier<MessageEncoderDecoder<T>> encdecFactory) {
-
+            Supplier<MessageEncoderDecoder<Message>> encdecFactory) {
         this.port = port;
         this.bidiProtocolFactory = bidiprotocolFactory;
         this.encdecFactory = encdecFactory;
 		this.sock = null;
 		this.connections = new ConnectionsImpl();
 		this.connectionID = 0;
-		//k
     }
 
     @Override
@@ -69,5 +68,4 @@ public abstract class BaseServer<T> implements Server<T> {
 
     protected abstract void execute(BlockingConnectionHandler<T>  handler);
     //two types of execute
-
 }
