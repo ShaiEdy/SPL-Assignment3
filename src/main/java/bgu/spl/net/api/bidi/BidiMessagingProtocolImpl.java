@@ -1,5 +1,6 @@
 package bgu.spl.net.api.bidi;
 
+import bgu.spl.net.api.Customer;
 import bgu.spl.net.impl.messages.*;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -7,10 +8,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol<T> {
     private ConcurrentHashMap<Integer,Connections<T>> idToConnections;
     private boolean shouldTerminate;
+    private Customer customer;
+
 
     public BidiMessagingProtocolImpl() {
         this.idToConnections = new ConcurrentHashMap<>();
         this.shouldTerminate = false;
+
     }
 
     /**
@@ -22,7 +26,7 @@ public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol<T> {
     }
 
     @Override
-    public void process(T message) { // get a specific message as created in encoder decoder
+    public void process(T message ) { // get a specific message as created in encoder decoder
   //use here the act messages of the messages for doing the specific process that needed
     }
 

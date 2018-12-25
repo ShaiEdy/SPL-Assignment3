@@ -18,7 +18,6 @@ public class RegisterMessage<T> extends Message<T> {
 
     /**
      * Used to make a String of all the bytes from messageBytesArray[index] to the first /0 in messageBytesArray.
-     *
      **/
     private void appendToString(byte[] messageBytesArray, String stringToAppendTo){
         while (messageBytesArray[index] != '\0') {

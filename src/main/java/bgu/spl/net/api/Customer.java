@@ -5,9 +5,9 @@ public class Customer {
     private String password;
     private boolean login;
 
-    public Customer(String userName, String password) {
-        this.userName = userName;
-        this.password = password;
+    public Customer() {
+        this.userName = null;
+        this.password = null;
         this.login = false;
     }
 
@@ -21,6 +21,14 @@ public class Customer {
 
     public boolean isLogin() {
         return login;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public void setLogin(boolean login) {
