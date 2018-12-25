@@ -20,6 +20,7 @@ public abstract class BaseServer<T> implements Server<T> {
     private ServerSocket sock;
     private ConnectionsImpl connections;
     private int connectionID; //Unique ID for each customer.
+    //todo- All posts should be saved to a data structure in the server, along with PM messages.  (not here maybe?)_
 
     public BaseServer(
             int port,
