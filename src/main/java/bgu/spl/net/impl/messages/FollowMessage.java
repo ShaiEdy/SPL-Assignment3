@@ -5,16 +5,16 @@ import java.util.Vector;
 
 public class FollowMessage<T> extends Message<T> {
     private Boolean follow; //(true=follow, false= unFollow)
-    private int numOfUsers;
+    private short numOfUsers;
     private List<String> userNameList;
 
     public FollowMessage(byte[] messageBytesArray) {
         userNameList= new Vector<>();
         if (messageBytesArray[2]==0) follow=true;
         else follow=false;
-        numOfUsers= messageBytesArray[3];
-        int index=4;
-
+        byte[] twoBytes= {messageBytesArray[3],messageBytesArray[4]};
+        numOfUsers= bytesToShort(twoBytes);
+        int index=5;
         while (index<messageBytesArray.length) {
             String userName= "";
             while (messageBytesArray[index] != '\0') {
@@ -30,4 +30,12 @@ public class FollowMessage<T> extends Message<T> {
     public T act(T message) {
         return null;
     }  //make it follow or unFollow and return the result (success or not)
+
+    public short bytesToShort(byte[] byteArr)
+    {
+        short result = (short)((byteArr[0] & 0xff) << 8);
+        result += (short)(byteArr[1] & 0xff);
+        return result;
+    }
 }
+
