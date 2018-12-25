@@ -6,14 +6,24 @@ public class RegisterMessage<T> extends Message<T> {
     private String userName = "";
     private String password = "";
 
+
     public RegisterMessage(byte[] messageBytesArray) {
         this.arrayLength = messageBytesArray.length;
 
-        while (index<arrayLength && messageBytesArray[index]!= '\0'){
+        appendToString(messageBytesArray,userName);
+        index++;
+        appendToString(messageBytesArray,password);
 
-        }
+    }
 
-        for (int i = 2; i < arrayLength; i++) {
+    /**
+     * Used to make a String of all the bytes from messageBytesArray[index] to the first /0 in messageBytesArray.
+     *
+     **/
+    private void appendToString(byte[] messageBytesArray, String stringToAppendTo){
+        while (messageBytesArray[index] != '\0') {
+            stringToAppendTo += Byte.toString(messageBytesArray[index]); // we append the userName with the next byte.
+            index++;
         }
     }
 
