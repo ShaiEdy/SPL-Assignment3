@@ -53,6 +53,7 @@ public abstract class BaseServer<T> implements Server<T> {
                 execute(handler);
 
                 connections.addNewConnection(connectionID,handler);
+
                 connectionID++;
             }
         } catch (IOException ex) {

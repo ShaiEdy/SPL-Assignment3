@@ -6,15 +6,15 @@ import bgu.spl.net.impl.messages.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol<T> {
-    private ConcurrentHashMap<Integer,Connections<T>> idToConnections;
+    private int connectionId;
+    private Connections connections;
     private boolean shouldTerminate;
     private Customer customer;
 
 
     public BidiMessagingProtocolImpl() {
-        this.idToConnections = new ConcurrentHashMap<>();
+        //this.idToConnections = new ConcurrentHashMap<>();
         this.shouldTerminate = false;
-
     }
 
     /**
@@ -22,7 +22,7 @@ public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol<T> {
      **/
     @Override
     public void start(int connectionId, Connections connections) {
-        idToConnections.put(connectionId,connections);
+
     }
 
     @Override

@@ -1,5 +1,7 @@
 package bgu.spl.net.impl.messages;
 
+import bgu.spl.net.api.Customer;
+
 import java.util.List;
 import java.util.Vector;
 
@@ -27,7 +29,8 @@ public class FollowMessage<T> extends Message<T> {
     }
 
     @Override
-    public T act(T message,) {
+    public T act(T message, Customer customer) {
+
         return null;
     }  //make it follow or unFollow and return the result (success or not)
 
@@ -37,4 +40,3 @@ public class FollowMessage<T> extends Message<T> {
         return result;
     }
 }
-

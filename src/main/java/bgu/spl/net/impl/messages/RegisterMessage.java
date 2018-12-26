@@ -1,5 +1,7 @@
 package bgu.spl.net.impl.messages;
 
+import bgu.spl.net.api.Customer;
+
 public class RegisterMessage<T> extends Message<T> {
     private int arrayLength;
     private int index = 2; // represents the index we are currently looking at. starts from 2 because we dont care about the Opcode.
@@ -27,7 +29,10 @@ public class RegisterMessage<T> extends Message<T> {
     }
 
     @Override
-    public T act(T message) {
+    protected T act(T message, Customer customer) {
+        customer.setUserName(userName);
+        customer.setPassword(password);
+
         return null;
     }
 }

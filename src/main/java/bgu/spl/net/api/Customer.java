@@ -3,12 +3,12 @@ package bgu.spl.net.api;
 public class Customer {
     private String userName;
     private String password;
-    private boolean login;
+    private boolean isLoggedIn;
 
     public Customer() {
         this.userName = null;
         this.password = null;
-        this.login = false;
+        this.isLoggedIn = false;
     }
 
     public String getUserName() {
@@ -20,7 +20,7 @@ public class Customer {
     }
 
     public boolean isLogin() {
-        return login;
+        return isLoggedIn;
     }
 
     public void setUserName(String userName) {
@@ -31,7 +31,7 @@ public class Customer {
         this.password = password;
     }
 
-    public void setLogin(boolean login) {
-        this.login = login;
+    public void setLoggedInStatus(boolean login) {
+        this.isLoggedIn = login;
     }
 }

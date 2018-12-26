@@ -2,13 +2,14 @@ package bgu.spl.net.api.bidi;
 
 import bgu.spl.net.api.Customer;
 import bgu.spl.net.srv.BlockingConnectionHandler;
+import bgu.spl.net.srv.bidi.ConnectionHandler;
 
 import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ConnectionsImpl <T> implements Connections<T> {
-    private ConcurrentHashMap<Integer, BlockingConnectionHandler> idToConnectionHandler; //all the clients that connected to the server
+    private ConcurrentHashMap<Integer, ConnectionHandler> idToConnectionHandler; //all the clients that connected to the server
     private ConcurrentHashMap<Integer, Customer> idToCustomer;
 
     public ConnectionsImpl() {
@@ -16,16 +17,16 @@ public class ConnectionsImpl <T> implements Connections<T> {
         this.idToCustomer = new ConcurrentHashMap<>(); //  todo  delete the comment- need to be added here when someone do register
     }
 
-    public void addNewConnection(int connectionId, BlockingConnectionHandler BlockingCH) {
-        idToConnectionHandler.put(connectionId, BlockingCH);
+    public void addNewConnection(int connectionId, ConnectionHandler CH) {
+        idToConnectionHandler.put(connectionId, CH);
     }
 
     //
     @Override
     //send the msg to the CH with the given id
     public boolean send(int connectionId, T msg) {
-        BlockingConnectionHandler blockingCH = idToConnectionHandler.get(connectionId);
-        blockingCH.send(msg);
+        ConnectionHandler CH = idToConnectionHandler.get(connectionId);
+        CH.send(msg);
         return false; //todo- think how to know if the send succeed or not
     }
 
@@ -34,8 +35,8 @@ public class ConnectionsImpl <T> implements Connections<T> {
     public void broadcast(T msg) {
         Set<Integer> idSet = idToConnectionHandler.keySet();
         for (Integer integer : idSet) {
-            BlockingConnectionHandler blockingCH = idToConnectionHandler.get(integer);
-            blockingCH.send(msg);
+            ConnectionHandler CH = idToConnectionHandler.get(integer);
+            CH.send(msg);
         }
     }
 
