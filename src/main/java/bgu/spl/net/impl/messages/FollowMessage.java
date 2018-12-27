@@ -27,7 +27,7 @@ public class FollowMessage<T> extends Message<T> {
     }
 
     @Override
-    public T act(T message,) {
+    public T act(T message) {
         return null;
     }  //make it follow or unFollow and return the result (success or not)..
 

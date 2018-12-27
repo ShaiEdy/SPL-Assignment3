@@ -23,6 +23,7 @@ public class LogInMessage<T> extends Message<T> {
         while (messageBytesArray[index] != '\0') {
             stringToAppendTo += Byte.toString(messageBytesArray[index]); // we append the userName with the next byte.
             index++;
+
         }
     }
 
