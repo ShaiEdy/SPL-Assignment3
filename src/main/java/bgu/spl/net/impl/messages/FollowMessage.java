@@ -32,7 +32,7 @@ public class FollowMessage<T> extends Message<T> {
     public T act(T message, Customer customer) {
 
         return null;
-    }  //make it follow or unFollow and return the result (success or not)
+    }  //make it follow or unFollow and return the result (success or not).
 
     public short bytesToShort(byte[] byteArr) {
         short result = (short) ((byteArr[0] & 0xff) << 8);
