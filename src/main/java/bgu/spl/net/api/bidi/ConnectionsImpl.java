@@ -21,7 +21,7 @@ public class ConnectionsImpl <T> implements Connections<T> {
         idToConnectionHandler.put(connectionId, CH);
     }
 
-    //
+
     @Override
     //send the msg to the CH with the given id
     public boolean send(int connectionId, T msg) {

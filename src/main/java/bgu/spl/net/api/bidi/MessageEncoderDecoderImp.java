@@ -20,20 +20,7 @@ public class MessageEncoderDecoderImp<T> implements MessageEncoderDecoder<T> { /
         len=0;
         isMessage= false;
     }
-    /*private Message convertStringToMessage (byte[] messageArray) {//todo maybe remove to encdec
-        /*short opcode = bytesToShort(messageArray);
-        if (opcode==0) return new RegisterMessage(messageArray);
-        else if (opcode==1) return new LogInMessage(messageArray);
-        else if (opcode==2) return new LogOutMessage(messageArray);
-        else if (opcode==3) return new FollowMessage(messageArray);
-        else if (opcode==4) return new PostMessage(messageArray);
-        else if (opcode==5) return new PMMessage(messageArray);
-        else if (opcode==6) return new UserListMessage(messageArray);
-        else if(opcode==7) return new StatMessage(messageArray);
 
-        return null; //todo- add else before the return null
-    }
-    */
 
     @Override
     public T decodeNextByte(byte nextByte) {
