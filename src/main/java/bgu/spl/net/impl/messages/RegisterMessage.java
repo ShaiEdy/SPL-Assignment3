@@ -35,4 +35,9 @@ public class RegisterMessage<T> extends Message<T> {
 
         return null;
     }
+
+    @Override
+    protected T act(T message) {
+        return null;
+    }
 }
