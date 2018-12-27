@@ -38,22 +38,18 @@ public abstract class BaseServer<T> implements Server<T> {
     public void serve() {
 
         try (ServerSocket serverSock = new ServerSocket(port)) {
-			System.out.println("Server started");
-
+            System.out.println("Server started");
             this.sock = serverSock; //just to be able to close (the close is to sock)
-
             while (!Thread.currentThread().isInterrupted()) {
-
                 Socket clientSock = serverSock.accept(); //wait till a client connect with the server
-
-                BlockingConnectionHandler<T> handler= new BlockingConnectionHandler<T>( //kind of creating customer.
+                BlockingConnectionHandler<T> handler = new BlockingConnectionHandler<T>( //kind of creating customer.
                         clientSock,
                         encdecFactory.get(),
-                        bidiProtocolFactory.get());
+                        bidiProtocolFactory.get(),
+                        connectionID, connections);
                 execute(handler);
 
-                connections.addNewConnection(connectionID,handler);
-
+                connections.addNewConnection(connectionID, handler);
                 connectionID++;
             }
         } catch (IOException ex) {
