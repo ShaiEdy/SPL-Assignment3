@@ -39,7 +39,7 @@ public class FollowMessage extends Message {
     @Override
     protected Message act(ConcurrentHashMap<String, Customer> dataMap, Customer thisCustomer) {
         List<String> successList = new Vector();
-        int successNum = 0;
+        Integer successNum = 0;
         if (thisCustomer != null && thisCustomer.isLogin()) {
             for (String userName : userNameList) { // follow/ unFollow each customer in the list
                 Customer otherCustomer = dataMap.get(userName); // customer from the list to un/follow
@@ -63,11 +63,11 @@ public class FollowMessage extends Message {
             }
         }
         if (successNum > 0) {
-            String namesForOptionalArray= "";
+            String OptionalArray= successNum.toString();
             for (String name: successList){
-                namesForOptionalArray+=("0"+name);
+                OptionalArray+=(name+"\0"); //\0 will be separating 0 byte
             }
-            return new AckMessage((short) 4, null);
+            return new AckMessage((short) 4, OptionalArray.getBytes());
         } else return new ErrorMessage((short) 4);
     }
 }

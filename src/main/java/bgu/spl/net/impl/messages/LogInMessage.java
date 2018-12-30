@@ -31,7 +31,7 @@ public class LogInMessage extends Message {
     }
 
     @Override
-    protected Message act(ConcurrentHashMap<String, Customer> dataMap) {
+    protected Message act(ConcurrentHashMap<String, Customer> dataMap, Customer customer) {
         dataMap.get(userName).setLoggedInStatus(true);
         return (Message) new AckMessage((short) 2,null);
     }

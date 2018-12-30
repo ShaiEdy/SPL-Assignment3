@@ -1,6 +1,10 @@
 package bgu.spl.net.impl.messages;
 
-public class NotificationMessage<T> extends Message<T> {
+import bgu.spl.net.api.Customer;
+
+import java.util.concurrent.ConcurrentHashMap;
+
+public class NotificationMessage extends Message {
     private char notificationByte;
     private String postingUser;
     private String content;
@@ -18,8 +22,13 @@ public class NotificationMessage<T> extends Message<T> {
             index++;
         }
     }
+
+    public NotificationMessage() {
+
+    }
+
     @Override
-    public T act(T message) {
+    protected Message act(ConcurrentHashMap<String, Customer> dataMap, Customer customer) {
         return null;
     }
 }
