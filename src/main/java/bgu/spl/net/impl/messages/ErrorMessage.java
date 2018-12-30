@@ -1,23 +1,26 @@
 package bgu.spl.net.impl.messages;
 
 import bgu.spl.net.api.Customer;
+import java.util.concurrent.ConcurrentHashMap;
 
-public class ErrorMessage<T> extends Message<T> {
-    short messageOpcode;
+public class ErrorMessage extends Message {
+    short messageOpcode = 11;
+    short otherMessageOpcode;
 
-    public ErrorMessage(byte [] messageBytesArray) {
-        byte[] byteArrMsgOpcose= {messageBytesArray[2], messageBytesArray[3]};
-        messageOpcode= bytesToShort(byteArrMsgOpcose);
+    public ErrorMessage(short otherMessageOpcode) {
+        this.otherMessageOpcode = otherMessageOpcode;
+    }
+
+    public short getMessageOpcode() {
+        return messageOpcode;
+    }
+
+    public short getOtherMessageOpcode() {
+        return otherMessageOpcode;
     }
 
     @Override
-    protected T act(T message) {
+    protected Message act(ConcurrentHashMap<String, Customer> dataMap) {
         return null;
-    }
-
-    public short bytesToShort(byte[] byteArr) {
-        short result = (short) ((byteArr[0] & 0xff) << 8);
-        result += (short) (byteArr[1] & 0xff);
-        return result;
     }
 }
