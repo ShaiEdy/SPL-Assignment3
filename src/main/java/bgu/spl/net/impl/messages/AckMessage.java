@@ -32,7 +32,7 @@ public class AckMessage extends Message{
     }
 
     @Override
-    protected Message act(ConcurrentHashMap<String, Customer> dataMap) {
+    protected Message act(ConcurrentHashMap<String, Customer> dataMap, Customer customer) {
         return null;
     }
 }
