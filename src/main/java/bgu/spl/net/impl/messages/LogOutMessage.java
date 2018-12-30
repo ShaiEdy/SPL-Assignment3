@@ -1,10 +1,13 @@
 package bgu.spl.net.impl.messages;
 
-public class LogOutMessage<T> extends Message<T> {
+import bgu.spl.net.api.Customer;
+import java.util.concurrent.ConcurrentHashMap;
+
+public class LogOutMessage extends Message {
     public LogOutMessage(byte[] bytes) {}//there is nothing special to build
 
     @Override
-    public T act(T message) {
+    protected Message act(ConcurrentHashMap<String, Customer> dataMap) {
         return null;
     }
 }
