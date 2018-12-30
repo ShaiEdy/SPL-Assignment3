@@ -46,4 +46,9 @@ public class RegisterMessage extends Message {
 
         }
     }
+
+    @Override
+    protected T act(T message) {
+        return null;
+    }
 }
