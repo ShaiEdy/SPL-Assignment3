@@ -7,9 +7,9 @@ public class Customer {
     private String userName;
     private String password;
     private boolean isLoggedIn;
-    private List following;
-    private List posts;
-    private List PMs;
+    private List<Customer> following;
+    private List<String> posts;
+    private List<String> PMs;
 
     public Customer(String userName, String password) {
         this.userName = userName;
@@ -63,4 +63,13 @@ public class Customer {
     public List getPMs() {
         return PMs;
     }
+
+    public void addPost(String post){
+        posts.add(post);
+    }
+
+    public void addPM(String PM){
+        PMs.add(PM);
+    }
+
 }
