@@ -1,6 +1,10 @@
 package bgu.spl.net.impl.messages;
 
-public class LogInMessage<T> extends Message<T> {
+import bgu.spl.net.api.Customer;
+
+import java.util.concurrent.ConcurrentHashMap;
+
+public class LogInMessage extends Message {
     private int arrayLength;
     private int index = 2; // represents the index we are currently looking at. starts from 2 because we dont care about the Opcode.
     private String userName = "";
@@ -23,12 +27,12 @@ public class LogInMessage<T> extends Message<T> {
         while (messageBytesArray[index] != '\0') {
             stringToAppendTo += Byte.toString(messageBytesArray[index]); // we append the userName with the next byte.
             index++;
-
         }
     }
 
     @Override
-    public T act(T message) {
-        return null;
+    protected Message act(ConcurrentHashMap<String, Customer> dataMap) {
+        dataMap.get(userName).setLoggedInStatus(true);
+        return (Message) new AckMessage((short) 2,null);
     }
 }
