@@ -2,9 +2,10 @@ package bgu.spl.net.impl.messages;
 
 import bgu.spl.net.api.Customer;
 
-public class RegisterMessage<T> extends Message<T> {
+import java.util.concurrent.ConcurrentHashMap;
+
+public class RegisterMessage extends Message {
     private int arrayLength;
-    private int index = 2; // represents the index we are currently looking at. starts from 2 because we dont care about the Opcode.
     private String userName = "";
     private String password = "";
 
@@ -12,16 +13,17 @@ public class RegisterMessage<T> extends Message<T> {
     public RegisterMessage(byte[] messageBytesArray) {
         this.arrayLength = messageBytesArray.length;
 
-        appendToString(messageBytesArray,userName);
-        index++;
-        appendToString(messageBytesArray,password);
+        int index = 2; // represents the index we are currently looking at. starts from 2 because we dont care about the Opcode.
 
+        appendToString(messageBytesArray, userName, index);
+        index++;
+        appendToString(messageBytesArray, password, index);
     }
 
     /**
      * Used to make a String of all the bytes from messageBytesArray[index] to the first /0 in messageBytesArray.
      **/
-    private void appendToString(byte[] messageBytesArray, String stringToAppendTo){
+    private void appendToString(byte[] messageBytesArray, String stringToAppendTo, int index) {
         while (messageBytesArray[index] != '\0') {
             stringToAppendTo += Byte.toString(messageBytesArray[index]); // we append the userName with the next byte.
             index++;
@@ -29,10 +31,19 @@ public class RegisterMessage<T> extends Message<T> {
     }
 
     @Override
-    protected T act(T message, Customer customer) {
-        customer.setUserName(userName);
-        customer.setPassword(password);
+    protected Message act(ConcurrentHashMap<String, Customer> dataMap) {
+        //first we will check that this customer is not already registered.
+        if (dataMap.containsKey(userName)) {
+            return new ErrorMessage(); //todo: change ErrorMessage constructor.
+        }
 
-        return null;
+        else { // if username is not already registered
+            Customer customer = new Customer(userName, password); //create the customer.
+            dataMap.put(userName, customer); // put it in the data map
+            //todo: do we need to think about problems caused by multiThreading? what if two clients register at the same time with the same user name?
+
+            return new AckMessage();
+
+        }
     }
 }

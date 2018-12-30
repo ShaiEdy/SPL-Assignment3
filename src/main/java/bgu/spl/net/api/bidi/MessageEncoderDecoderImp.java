@@ -1,70 +1,41 @@
 package bgu.spl.net.api.bidi;
 
 import bgu.spl.net.api.MessageEncoderDecoder;
-import bgu.spl.net.impl.messages.LogOutMessage;
-import bgu.spl.net.impl.messages.Message;
-import bgu.spl.net.impl.messages.PostMessage;
-
+import bgu.spl.net.impl.messages.*;
 import java.util.Arrays;
-import java.util.Vector;
 
 public class MessageEncoderDecoderImp<T> implements MessageEncoderDecoder<T> { //T is message
-    private byte [] bytes;
-    private int len;
-    private short opcode;
-    private boolean isMessage;
-    private T newMessage;
+    private byte[] bytes = new byte[1 << 10]; //start with 1k
+    private int len = 0;
 
-    public MessageEncoderDecoderImp() {
-        byte [] bytes;
-        len=0;
-        isMessage= false;
-    }
-
+    public MessageEncoderDecoderImp() {}
 
     @Override
     public T decodeNextByte(byte nextByte) {
+        if (nextByte == '\n') {
+            pushByte(nextByte);
+            return popMessage();
+        }
         pushByte(nextByte);
-        if (len==1) {
-            return null; //not a line yet
-        }
-        if (len==2) {
-            this.opcode= bytesToShort(bytes);
-        }
-
-        if (len>=2) {
-            if (opcode == 1| opcode==2) {
-                //todo write this
-            }
-            if (opcode==3){ //unregister is only the opcode
-                Message message = new LogOutMessage(bytes);
-                resolve((T) message);
-                return popMessage();
-            }
-            if (opcode==4){
-                //todo its follow and its shit... for tomorrow
-            }
-            if (opcode==5){
-                if (nextByte == '\0') {
-                    Message message = new PostMessage(bytes);
-                    resolve((T) message);
-                    popMessage();
-                }
-            } //todo to be continue
-
-        }
-    return null; //will return null only if the message was not completed
+        return null; //not a line yet
     }
 
-    private void resolve (T message){
-        this.newMessage = message;
-        isMessage = true;
-    }
-    private T popMessage(){
-        isMessage= true;
+    private T popMessage() { // we enter popMessage only when the message is done.
         len = 0;
-        return newMessage;
         //todo- should I "clean" the  bytes array? (they do not clean it in echo)
+
+        short opcode = bytesToShort(bytes); //first we need to get the opcode from the first two byte.
+
+        if (opcode == 1) return (T) new RegisterMessage(bytes);
+        else if (opcode == 2) return (T) new LogInMessage(bytes);
+        else if (opcode == 3) return (T) new LogOutMessage(bytes);
+        else if (opcode == 4) return (T) new FollowMessage(bytes);
+        else if (opcode == 5) return (T) new PostMessage(bytes);
+        else if (opcode == 6) return (T) new PMMessage(bytes);
+        else if (opcode == 7) return (T) new UserListMessage(bytes);
+        else if (opcode == 8) return (T) new StatMessage(bytes);
+
+        return null;
     }
 
     private void pushByte(byte nextByte) { //push the new byte to the array (and extend it if needed)
@@ -78,15 +49,14 @@ public class MessageEncoderDecoderImp<T> implements MessageEncoderDecoder<T> { /
     @Override
     public byte[] encode(T message) {
         return new byte[0];
+        //todo: implement
     }
 
-    private short bytesToShort(byte[] byteArr)
-    {
-        short result = (short)((byteArr[0] & 0xff) << 8);
-        result += (short)(byteArr[1] & 0xff);
+    private short bytesToShort(byte[] byteArr) {
+
+        short result = (short) ((byteArr[0] & 0xff) << 8);
+        result += (short) (byteArr[1] & 0xff);
         return result;
     }
-
-
 
 }

@@ -2,7 +2,9 @@ package bgu.spl.net.impl.messages;
 
 import bgu.spl.net.api.Customer;
 
-public abstract class Message<T> { //todo: check if we need to implement something? closeable?
+import java.util.concurrent.ConcurrentHashMap;
 
-    protected abstract T act(T message, Customer customer);
+public abstract class Message { //todo: check if we need to implement something? closeable?
+
+    protected abstract Message act(ConcurrentHashMap<String, Customer> dataMap);
 }

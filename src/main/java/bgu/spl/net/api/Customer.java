@@ -5,9 +5,9 @@ public class Customer {
     private String password;
     private boolean isLoggedIn;
 
-    public Customer() {
-        this.userName = null;
-        this.password = null;
+    public Customer(String userName, String password) {
+        this.userName = userName;
+        this.password = password;
         this.isLoggedIn = false;
     }
 

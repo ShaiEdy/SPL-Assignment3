@@ -2,15 +2,17 @@ package bgu.spl.net.api.bidi;
 
 import bgu.spl.net.api.Customer;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol<T> {
     private int connectionId;
     private Connections connections;
     private boolean shouldTerminate;
-    private Customer customer;
+    private ConcurrentHashMap<String,Customer> dataMap;
 
 
-    public BidiMessagingProtocolImpl() {
-        //this.idToConnections = new ConcurrentHashMap<>();
+    public BidiMessagingProtocolImpl(ConcurrentHashMap dataMap) {
+        this.dataMap = dataMap;
         this.shouldTerminate = false;
     }
 
