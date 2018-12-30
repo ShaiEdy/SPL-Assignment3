@@ -37,14 +37,14 @@ public class FollowMessage extends Message {
     }
 
     @Override
-    protected Message act(ConcurrentHashMap<String, Customer> dataMap, Customer thiscustomer) {
-        if (thiscustomer==null) return new ErrorMessage((short)4);
+    protected Message act(ConcurrentHashMap<String, Customer> dataMap, Customer thisCustomer) {
+        if (thisCustomer==null) return new ErrorMessage((short)4);
         else {
             for (String userName : userNameList) { // follow/ unFollow each customer in the list
                 Customer customer = dataMap.get(userName); // customer from the list to un/follow
                 if (customer != null) { //the user with this name is register
-                    if (follow) customer.addFolloing(thiscustomer);
-                    if (!follow) customer.removeFolloing(thiscustomer);
+                    if (follow) customer.addFollowing(thisCustomer);
+                    if (!follow) customer.removeFollowing(thisCustomer);
                 }
             }
             return new AckMessage((short)4, null );

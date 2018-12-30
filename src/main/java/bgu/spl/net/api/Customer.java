@@ -7,13 +7,13 @@ public class Customer {
     private String userName;
     private String password;
     private boolean isLoggedIn;
-    private List folloing ;
+    private List following;
 
     public Customer(String userName, String password) {
         this.userName = userName;
         this.password = password;
         this.isLoggedIn = false;
-        this.folloing= new Vector(); // todo- maybe other data structure ?
+        this.following= new Vector(); // todo- maybe other data structure ?
     }
 
     public String getUserName() {
@@ -40,11 +40,11 @@ public class Customer {
         this.isLoggedIn = login;
     }
 
-    public void addFolloing(Customer customer){
-        folloing.add(customer);
+    public void addFollowing(Customer customer){
+        following.add(customer);
     }
 
-    public void removeFolloing(Customer customer){
-        folloing.remove(customer);
+    public void removeFollowing(Customer customer){
+        following.remove(customer);
     }
 }
