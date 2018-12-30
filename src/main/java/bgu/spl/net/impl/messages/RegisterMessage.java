@@ -34,7 +34,7 @@ public class RegisterMessage extends Message {
     protected Message act(ConcurrentHashMap<String, Customer> dataMap,Customer customer) {
         //first we will check that this customer is not already registered.
         if (customer!=null) //if customer was already registered.
-            return new ErrorMessage((short)1); //todo: change ErrorMessage constructor.
+            return new ErrorMessage((short)1);
 
 
         else { // if username is not already registered
