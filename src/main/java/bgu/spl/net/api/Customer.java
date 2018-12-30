@@ -8,12 +8,16 @@ public class Customer {
     private String password;
     private boolean isLoggedIn;
     private List following;
+    private List posts;
+    private List PMs;
 
     public Customer(String userName, String password) {
         this.userName = userName;
         this.password = password;
         this.isLoggedIn = false;
         this.following= new Vector(); // todo- maybe other data structure ?
+        this.posts = new Vector();
+        this.PMs = new Vector();
     }
 
     public String getUserName() {
@@ -50,5 +54,13 @@ public class Customer {
 
     public List getFollowing() {
         return following;
+    }
+
+    public List getPosts() {
+        return posts;
+    }
+
+    public List getPMs() {
+        return PMs;
     }
 }
