@@ -36,6 +36,5 @@ public class PostMessage extends Message {
         //todo: remember to check if user is registered before sending message
 
 
-
     }
 }
