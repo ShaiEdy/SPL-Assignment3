@@ -38,16 +38,36 @@ public class FollowMessage extends Message {
 
     @Override
     protected Message act(ConcurrentHashMap<String, Customer> dataMap, Customer thisCustomer) {
-        if (thisCustomer==null) return new ErrorMessage((short)4);
-        else {
+        List<String> successList = new Vector();
+        int successNum = 0;
+        if (thisCustomer != null && thisCustomer.isLogin()) {
             for (String userName : userNameList) { // follow/ unFollow each customer in the list
-                Customer customer = dataMap.get(userName); // customer from the list to un/follow
-                if (customer != null) { //the user with this name is register
-                    if (follow) customer.addFollowing(thisCustomer);
-                    if (!follow) customer.removeFollowing(thisCustomer);
+                Customer otherCustomer = dataMap.get(userName); // customer from the list to un/follow
+                if (otherCustomer != null) { //the user with this name is register
+                    if (follow) {
+                        if (!otherCustomer.getFollowing().contains(otherCustomer)) { //not already Follow
+                            otherCustomer.addFollowing(thisCustomer);
+                            successNum++;
+                            successList.add(otherCustomer.getUserName());
+                        }
+                    } else { //unFollow
+                        otherCustomer.removeFollowing(thisCustomer);
+                        if (otherCustomer.getFollowing().contains(otherCustomer)) { //if is now follow we will make it unFollow
+                            otherCustomer.removeFollowing(thisCustomer);
+                            successNum++;
+                            successList.add(otherCustomer.getUserName());
+                        }
+                    }
+
                 }
             }
-            return new AckMessage((short)4, null );
         }
+        if (successNum > 0) {
+            String namesForOptionalArray= "";
+            for (String name: successList){
+                namesForOptionalArray+=("0"+name);
+            }
+            return new AckMessage((short) 4, null);
+        } else return new ErrorMessage((short) 4);
     }
 }

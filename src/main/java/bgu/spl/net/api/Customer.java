@@ -47,4 +47,8 @@ public class Customer {
     public void removeFollowing(Customer customer){
         following.remove(customer);
     }
+
+    public List getFollowing() {
+        return following;
+    }
 }
