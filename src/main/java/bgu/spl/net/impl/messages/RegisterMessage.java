@@ -31,18 +31,18 @@ public class RegisterMessage extends Message {
     }
 
     @Override
-    protected Message act(ConcurrentHashMap<String, Customer> dataMap,Customer customer) {
+    protected Message act(ConcurrentHashMap<String, Customer> dataMap, Customer customer) {
         //first we will check that this customer is not already registered.
-        if (customer!=null) //if customer was already registered.
-            return new ErrorMessage((short)1);
-
+        if (dataMap.containsKey(userName)) //if customer was already registered.
+            return new ErrorMessage((short) 1);
 
         else { // if username is not already registered
-            customer = new Customer(userName, password); //create the customer.
+            customer.setUserName(userName);
+            customer.setPassword(password);
             dataMap.put(userName, customer); // put it in the data map
             //todo: do we need to think about problems caused by multiThreading? what if two clients register at the same time with the same user name?
 
-            return new AckMessage((short)1,null);
+            return new AckMessage((short) 1, null);
 
         }
     }

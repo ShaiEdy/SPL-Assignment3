@@ -4,21 +4,27 @@ import java.util.List;
 import java.util.Vector;
 
 public class Customer {
+    //------------------fields--------------------------
+
     private String userName;
     private String password;
     private boolean isLoggedIn;
     private List<Customer> following;
     private List<String> posts;
     private List<String> PMs;
+    private int connectionID;
 
-    public Customer(String userName, String password) {
-        this.userName = userName;
-        this.password = password;
+    //------------------constructor----------------------
+
+    public Customer() {
         this.isLoggedIn = false;
-        this.following= new Vector(); // todo- maybe other data structure ?
-        this.posts = new Vector();
-        this.PMs = new Vector();
+        this.following= new Vector<>(); // todo- maybe other data structure ?
+        this.posts = new Vector<>();
+        this.PMs = new Vector<>();
+        this.connectionID = -1;
     }
+
+    //------------------getters--------------------------
 
     public String getUserName() {
         return userName;
@@ -28,9 +34,27 @@ public class Customer {
         return password;
     }
 
-    public boolean isLogin() {
+    public boolean isLoggedIn() {
         return isLoggedIn;
     }
+
+    public List<Customer> getFollowing() {
+        return following;
+    }
+
+    public List<String> getPosts() {
+        return posts;
+    }
+
+    public List<String> getPMs() {
+        return PMs;
+    }
+
+    public int getConnectionID() {
+        return connectionID;
+    }
+
+    //------------------setters--------------------------
 
     public void setUserName(String userName) {
         this.userName = userName;
@@ -40,36 +64,23 @@ public class Customer {
         this.password = password;
     }
 
-    public void setLoggedInStatus(boolean login) {
-        this.isLoggedIn = login;
+    public void setLoggedIn(boolean loggedIn) {
+        isLoggedIn = loggedIn;
     }
 
-    public void addFollowing(Customer customer){
-        following.add(customer);
+    public void setFollowing(List<Customer> following) {
+        this.following = following;
     }
 
-    public void removeFollowing(Customer customer){
-        following.remove(customer);
+    public void setPosts(List<String> posts) {
+        this.posts = posts;
     }
 
-    public List getFollowing() {
-        return following;
+    public void setPMs(List<String> PMs) {
+        this.PMs = PMs;
     }
 
-    public List getPosts() {
-        return posts;
+    public void setConnectionID(int connectionID) {
+        this.connectionID = connectionID;
     }
-
-    public List getPMs() {
-        return PMs;
-    }
-
-    public void addPost(String post){
-        posts.add(post);
-    }
-
-    public void addPM(String PM){
-        PMs.add(PM);
-    }
-
 }

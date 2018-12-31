@@ -9,12 +9,13 @@ public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol<T> {
     private Connections connections;
     private boolean shouldTerminate;
     private ConcurrentHashMap<String,Customer> dataMap;
-    private Customer customer = null; //this object will never be initialized in the protocol. only in RegisterMessage.
+    private Customer customer; //this object will never be initialized in the protocol. only in RegisterMessage.
 
 
     public BidiMessagingProtocolImpl(ConcurrentHashMap dataMap) {
         this.dataMap = dataMap;
         this.shouldTerminate = false;
+        this.customer = new Customer();
     }
 
     /**
@@ -24,6 +25,7 @@ public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol<T> {
     public void start(int connectionId, Connections connections) {
         this.connectionId = connectionId;
         this.connections = connections;
+        this.customer.setConnectionID(connectionId);
     }
 
     @Override
