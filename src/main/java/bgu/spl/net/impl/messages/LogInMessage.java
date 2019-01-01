@@ -32,7 +32,7 @@ public class LogInMessage extends Message {
     }
 
     @Override
-    protected Message act(DataBase dataBase, Customer customer) {
+    public Message act(DataBase dataBase, Customer customer) {
         if (dataBase.getUserNameToCustomer().containsKey(userName)) { //if customer is registered.
             if (!customer.isLoggedIn()) { // if the protocol customer is not logged in already
                 int connectionID = customer.getConnectionID(); // we want to keep the old connectionID and to not lose it.

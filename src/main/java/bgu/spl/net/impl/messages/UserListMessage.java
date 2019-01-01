@@ -13,7 +13,7 @@ public class UserListMessage extends Message {
     public UserListMessage(byte[] bytes) {} //nothing special to build
 
     @Override
-    protected Message act(DataBase dataBase, Customer customer) {
+    public Message act(DataBase dataBase, Customer customer) {
         if (!customer.isLoggedIn()){
             return new ErrorMessage((short) 7);
         }

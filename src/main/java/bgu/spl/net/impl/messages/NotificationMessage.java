@@ -32,7 +32,7 @@ public class NotificationMessage extends Message {
 
 
     @Override
-    protected Message act(DataBase dataBase, Customer customer) {
+    public Message act(DataBase dataBase, Customer customer) {
         return null;
     }
 }

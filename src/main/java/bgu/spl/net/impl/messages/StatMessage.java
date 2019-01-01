@@ -16,7 +16,7 @@ public class StatMessage extends Message {
     }
 
     @Override
-    protected Message act(DataBase dataBase, Customer customer) {
+    public Message act(DataBase dataBase, Customer customer) {
         if (!customer.isLoggedIn() || dataBase.getUserNameToCustomer().get(userName) == null)
             return new ErrorMessage((short) 6); //if the sender is not logged in or the receiver is unRegistered we send error
         else {

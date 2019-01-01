@@ -36,7 +36,7 @@ public class PostMessage extends Message {
     }
 
     @Override
-    protected Message act(DataBase dataBase, Customer customer) {
+    public Message act(DataBase dataBase, Customer customer) {
         if (customer.isLoggedIn()) { // if customer is logged in
             customer.addPost(content); // first we save the content of the new post to the dataBase
             NotificationMessage notificationMessage = new NotificationMessage('1', customer.getUserName(), content);

@@ -6,7 +6,7 @@ import bgu.spl.net.api.DataBase;
 public abstract class Message { //todo: check if we need to implement something? closeable?
 
 
-    protected abstract Message act(DataBase dataBase, Customer customer);
+    public abstract Message act(DataBase dataBase, Customer customer);
 
     protected byte[] shortToBytes(short num)
     {

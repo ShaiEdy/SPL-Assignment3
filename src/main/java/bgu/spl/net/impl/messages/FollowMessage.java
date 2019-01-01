@@ -38,7 +38,7 @@ public class FollowMessage extends Message {
 
 
     @Override
-    protected Message act(DataBase dataBase, Customer thisCustomer) {
+    public Message act(DataBase dataBase, Customer thisCustomer) {
         List<String> successList = new Vector<>();
         short successNum = 0;
         if (thisCustomer.isLoggedIn()) {

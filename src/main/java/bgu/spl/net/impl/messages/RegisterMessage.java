@@ -32,7 +32,7 @@ public class RegisterMessage extends Message {
     }
 
     @Override
-    protected Message act(DataBase dataBase, Customer customer) {
+    public Message act(DataBase dataBase, Customer customer) {
         //first we will check that this customer is not already registered.
         if (dataBase.getUserNameToCustomer().containsKey(userName)) //if customer was already registered.
             return new ErrorMessage((short) 1);
