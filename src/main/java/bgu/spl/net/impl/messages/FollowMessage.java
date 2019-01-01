@@ -39,22 +39,23 @@ public class FollowMessage extends Message {
 
     @Override
     protected Message act(DataBase dataBase, Customer thisCustomer) {
-        List<String> successList = new Vector();
+        List<String> successList = new Vector<>();
         Integer successNum = 0;
-        if (thisCustomer != null && thisCustomer.isLoggedIn()) {
+        if (thisCustomer.isLoggedIn()) {
             for (String userName : userNameList) { // follow/ unFollow each customer in the list
                 Customer otherCustomer = dataBase.getUserNameToCustomer().get(userName); // customer from the list to un/follow
                 if (otherCustomer != null) { //the user with this name is register
                     if (follow) {
-                        if (!otherCustomer.getFollowing().contains(otherCustomer)) { //not already Follow
-                            otherCustomer.addFollowing(thisCustomer);
+                        if (!thisCustomer.getFollowedByMe().contains(otherCustomer)) { //if I'm not already following otherCustomer.
+                            //if (!otherCustomer.getFollowingMe().contains(otherCustomer)) { //not already Follow
+                            otherCustomer.addFollower(thisCustomer);
                             successNum++;
                             successList.add(otherCustomer.getUserName());
                         }
                     } else { //unFollow
-                        otherCustomer.removeFollowing(thisCustomer);
-                        if (otherCustomer.getFollowing().contains(otherCustomer)) { //if is now follow we will make it unFollow
-                            otherCustomer.removeFollowing(thisCustomer);
+                        if (thisCustomer.getFollowedByMe().contains(otherCustomer)) { //if I'm following otherCustomer.
+                            thisCustomer.removeFollowing(otherCustomer);
+                            otherCustomer.removeFollower(thisCustomer);
                             successNum++;
                             successList.add(otherCustomer.getUserName());
                         }

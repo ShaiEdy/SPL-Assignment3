@@ -10,7 +10,8 @@ public class Customer {
     private String userName;
     private String password;
     private boolean isLoggedIn;
-    private List<Customer> following;
+    private List<Customer> followingMe;
+    private List<Customer> followedByMe;
     private List<String> posts;
     private List<String> PMs;
     private int connectionID;
@@ -19,7 +20,8 @@ public class Customer {
 
     public Customer() {
         this.isLoggedIn = false;
-        this.following= new Vector<>(); // todo- maybe other data structure ?
+        this.followingMe = new Vector<>(); // todo- maybe other data structure ?
+        this.followedByMe = new Vector<>(); // todo- maybe other data structure ?
         this.posts = new Vector<>();
         this.PMs = new Vector<>();
         this.connectionID = -1;
@@ -30,21 +32,31 @@ public class Customer {
     public String getUserName() {
         return userName;
     }
+
     public String getPassword() {
         return password;
     }
+
     public boolean isLoggedIn() {
         return isLoggedIn;
     }
-    public List<Customer> getFollowing() {
-        return following;
+
+    public List<Customer> getFollowingMe() {
+        return followingMe;
     }
+
+    public List<Customer> getFollowedByMe() {
+        return followedByMe;
+    }
+
     public List<String> getPosts() {
         return posts;
     }
+
     public List<String> getPMs() {
         return PMs;
     }
+
     public int getConnectionID() {
         return connectionID;
     }
@@ -54,37 +66,58 @@ public class Customer {
     public void setUserName(String userName) {
         this.userName = userName;
     }
+
     public void setPassword(String password) {
         this.password = password;
     }
+
     public void setLoggedIn(boolean loggedIn) {
         isLoggedIn = loggedIn;
     }
-    public void setFollowing(List<Customer> following) {
-        this.following = following;
+
+    public void setFollowingMe(List<Customer> followingMe) {
+        this.followingMe = followingMe;
     }
+
+    public void setFollowedByMe(List<Customer> followedByMe) {
+        this.followedByMe = followedByMe;
+    }
+
     public void setPosts(List<String> posts) {
         this.posts = posts;
     }
+
     public void setPMs(List<String> PMs) {
         this.PMs = PMs;
     }
+
     public void setConnectionID(int connectionID) {
         this.connectionID = connectionID;
     }
 
     //-------------others---------------------------------
 
-    public void addFollowing (Customer customer){
-        following.add(customer);
+    public void addFollower(Customer customer) {
+        followingMe.add(customer);
     }
-    public void removeFollowing (Customer customer){
-        following.remove(customer);
+
+    public void removeFollower(Customer customer) {
+        followingMe.remove(customer);
     }
-    public void addPM(String content){
+
+    public void addFollowing(Customer customer) {
+        followedByMe.add(customer);
+    }
+
+    public void removeFollowing(Customer customer) {
+        followedByMe.remove(customer);
+    }
+
+    public void addPM(String content) {
         PMs.add(content); //todo think if content is enough or you want also the sender
     }
-    public void addPost(String content){
+
+    public void addPost(String content) {
         posts.add(content);
     }
 }
