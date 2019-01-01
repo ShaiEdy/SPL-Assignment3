@@ -3,7 +3,10 @@ package bgu.spl.net.api.bidi;
 import bgu.spl.net.api.Customer;
 import bgu.spl.net.api.DataBase;
 import bgu.spl.net.impl.messages.Message;
+import bgu.spl.net.impl.messages.NotificationMessage;
+import javafx.util.Pair;
 
+import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol<T> {
@@ -34,9 +37,17 @@ public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol<T> {
         //use here the act messages of the messages for doing the specific process that needed
         //we will send back a response using connections.
         Message newMessage= ((Message)message).act(dataBase,customer);
-        connections.send(connectionId,newMessage);
-
-
+        connections.send(connectionId,newMessage); // send ack/ error to the client
+        Pair<NotificationMessage, Vector<Customer> > notificationAndUsersVector= dataBase.getUserNameToNotificationSendList().get(customer.getUserName());
+        if (notificationAndUsersVector!=null){ // the pair is exist
+            Vector<Customer> usersVector = notificationAndUsersVector.getValue(); // second
+            NotificationMessage notificationMessage= notificationAndUsersVector.getKey(); // first
+            for (Customer notificationUser: usersVector){
+                connections.send(notificationUser.getConnectionID(),notificationMessage); //send notification that needed to be send
+            //todo- clean the vector
+                // todo - make sure to send only if logged in and if not think what to do
+            }
+        }
     }
 
     /**
