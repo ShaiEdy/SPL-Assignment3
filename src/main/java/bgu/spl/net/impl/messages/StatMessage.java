@@ -16,7 +16,6 @@ public class StatMessage extends Message {
         }
     }
 
-
     @Override
     protected Message act(DataBase dataBase, Customer customer) {
         return null;
