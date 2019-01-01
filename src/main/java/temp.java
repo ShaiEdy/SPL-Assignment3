@@ -14,8 +14,8 @@ import java.util.function.Supplier;
 
 public class temp {
     public static void main(String[] args) {
+        /*
         DataBase dataBase = new DataBase();
-        //ConcurrentHashMap<String, Customer> dataMap = new ConcurrentHashMap<>(); //data
         Server baseServer = Server.threadPerClient(7000,
                 () -> {
                     BidiMessagingProtocol<Message> bidiMessagingProtocol = new BidiMessagingProtocolImpl<>(dataBase);
@@ -25,5 +25,20 @@ public class temp {
                     MessageEncoderDecoderImp<Message> encoderDecoder = new MessageEncoderDecoderImp<>();
                     return encoderDecoder;
                 });
+                */
+        short x=2;
+        byte[] bytesArr = new byte[2];
+        bytesArr[0] = (byte)((x >> 8) & 0xFF);
+        bytesArr[1] = (byte)(x & 0xFF);
+
+        short y = 2;
+        String yy = Short.toString(y);
+        byte[] bytes = yy.getBytes();
+
+        String ss= "sadasdnasodasnmdoasmdoasdm";
+        byte[] dd= ss.getBytes();
+
+        x=1;
+
     }
 }

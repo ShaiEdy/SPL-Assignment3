@@ -40,7 +40,7 @@ public class PostMessage extends Message {
         if (customer.isLoggedIn()) { // if customer is logged in
             customer.addPost(content); // first we save the content of the new post to the dataBase
             NotificationMessage notificationMessage = new NotificationMessage('1', customer.getUserName(), content);
-            List<Customer> followingMe = customer.getFollowing(); // we get the "who is following me" Vector
+            List<Customer> followingMe = customer.getFollowingMe(); // we get the "who is following me" Vector
             // we iterate //todo: Check if there might be a problem when iterating over the vector when some one else is try to follow me at the same time.
             Vector<Customer> customersToSendNotificationToVector = new Vector<>(followingMe);
             for (String userNameToSendNotificationTo : userToPost) { // we iterate //todo: Check if there might be a problem when iterating over the vector when some one else is try to follow me at the same time.

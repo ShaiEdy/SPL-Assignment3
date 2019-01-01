@@ -1,6 +1,8 @@
 package bgu.spl.net.impl.messages;
 
 import bgu.spl.net.api.Customer;
+import bgu.spl.net.api.DataBase;
+
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ErrorMessage extends Message {
@@ -20,7 +22,7 @@ public class ErrorMessage extends Message {
     }
 
     @Override
-    protected Message act(ConcurrentHashMap<String, Customer> dataMap, Customer customer) {
+    protected Message act(DataBase dataBase, Customer customer) {
         return null;
     }
 }

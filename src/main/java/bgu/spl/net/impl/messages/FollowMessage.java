@@ -30,24 +30,30 @@ public class FollowMessage extends Message {
         }
     }
 
-
-    public short bytesToShort(byte[] byteArr) {
+    private short bytesToShort(byte[] byteArr) {
         short result = (short) ((byteArr[0] & 0xff) << 8);
         result += (short) (byteArr[1] & 0xff);
         return result;
     }
 
+    private byte[] shortToBytes(short num){
+        byte[] bytesArr = new byte[2];
+        bytesArr[0] = (byte)((num >> 8) & 0xFF);
+        bytesArr[1] = (byte)(num & 0xFF);
+        return bytesArr;
+    }
+
     @Override
     protected Message act(DataBase dataBase, Customer thisCustomer) {
         List<String> successList = new Vector<>();
-        Integer successNum = 0;
+        short successNum = 0;
         if (thisCustomer.isLoggedIn()) {
             for (String userName : userNameList) { // follow/ unFollow each customer in the list
                 Customer otherCustomer = dataBase.getUserNameToCustomer().get(userName); // customer from the list to un/follow
                 if (otherCustomer != null) { //the user with this name is register
                     if (follow) {
                         if (!thisCustomer.getFollowedByMe().contains(otherCustomer)) { //if I'm not already following otherCustomer.
-                            //if (!otherCustomer.getFollowingMe().contains(otherCustomer)) { //not already Follow
+                            thisCustomer.addFollowing(otherCustomer);
                             otherCustomer.addFollower(thisCustomer);
                             successNum++;
                             successList.add(otherCustomer.getUserName());
@@ -60,16 +66,33 @@ public class FollowMessage extends Message {
                             successList.add(otherCustomer.getUserName());
                         }
                     }
-
                 }
             }
         }
-        if (successNum > 0) {
-            String OptionalArray= successNum.toString();
-            for (String name: successList){
-                OptionalArray+=(name+"\0"); //\0 will be separating 0 byte
+        if (successNum > 0) { // if we followed/unfollowed at least 1 person.
+            byte[] numOfUsersBytesArr = shortToBytes(successNum);
+
+            String userNameListBytesArr = "";
+            for (String name : successList) {
+                userNameListBytesArr += (name + "\0"); //\0 will be separating 0 byte
             }
-            return new AckMessage((short) 4, OptionalArray.getBytes());
+            byte[] ackMessageOptionalArr = merge2Arrays(numOfUsersBytesArr, userNameListBytesArr.getBytes());
+
+            return new AckMessage((short) 4, ackMessageOptionalArr);
         } else return new ErrorMessage((short) 4);
+    }
+
+    private byte[] merge2Arrays(byte[] arr1, byte[] arr2) {
+        byte[] toReturn = new byte[arr1.length + arr2.length];
+        int index = 0;
+        for (byte b : arr1) {
+            toReturn[index] = b;
+            index++;
+        }
+        for (byte b : arr2) {
+            toReturn[index] = b;
+            index++;
+        }
+        return toReturn;
     }
 }
