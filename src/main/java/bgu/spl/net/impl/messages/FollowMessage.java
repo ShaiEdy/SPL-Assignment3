@@ -1,6 +1,7 @@
 package bgu.spl.net.impl.messages;
 
 import bgu.spl.net.api.Customer;
+import bgu.spl.net.api.DataBase;
 
 import java.util.List;
 import java.util.Vector;
@@ -37,12 +38,12 @@ public class FollowMessage extends Message {
     }
 
     @Override
-    protected Message act(ConcurrentHashMap<String, Customer> dataMap, Customer thisCustomer) {
+    protected Message act(DataBase dataBase, Customer thisCustomer) {
         List<String> successList = new Vector();
         Integer successNum = 0;
         if (thisCustomer != null && thisCustomer.isLoggedIn()) {
             for (String userName : userNameList) { // follow/ unFollow each customer in the list
-                Customer otherCustomer = dataMap.get(userName); // customer from the list to un/follow
+                Customer otherCustomer = dataBase.getUserNameToCustomer().get(userName); // customer from the list to un/follow
                 if (otherCustomer != null) { //the user with this name is register
                     if (follow) {
                         if (!otherCustomer.getFollowing().contains(otherCustomer)) { //not already Follow

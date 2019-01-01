@@ -1,4 +1,5 @@
 import bgu.spl.net.api.Customer;
+import bgu.spl.net.api.DataBase;
 import bgu.spl.net.api.MessageEncoderDecoder;
 import bgu.spl.net.api.bidi.BidiMessagingProtocol;
 import bgu.spl.net.api.bidi.BidiMessagingProtocolImpl;
@@ -13,10 +14,11 @@ import java.util.function.Supplier;
 
 public class temp {
     public static void main(String[] args) {
-        ConcurrentHashMap<String, Customer> dataMap = new ConcurrentHashMap<>(); //data
+        DataBase dataBase = new DataBase();
+        //ConcurrentHashMap<String, Customer> dataMap = new ConcurrentHashMap<>(); //data
         Server baseServer = Server.threadPerClient(7000,
                 () -> {
-                    BidiMessagingProtocol<Message> bidiMessagingProtocol = new BidiMessagingProtocolImpl<>(dataMap);
+                    BidiMessagingProtocol<Message> bidiMessagingProtocol = new BidiMessagingProtocolImpl<>(dataBase);
                     return bidiMessagingProtocol;
                 },
                 () -> {

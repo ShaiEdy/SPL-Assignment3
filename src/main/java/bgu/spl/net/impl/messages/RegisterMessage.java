@@ -1,6 +1,7 @@
 package bgu.spl.net.impl.messages;
 
 import bgu.spl.net.api.Customer;
+import bgu.spl.net.api.DataBase;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -31,15 +32,15 @@ public class RegisterMessage extends Message {
     }
 
     @Override
-    protected Message act(ConcurrentHashMap<String, Customer> dataMap, Customer customer) {
+    protected Message act(DataBase dataBase, Customer customer) {
         //first we will check that this customer is not already registered.
-        if (dataMap.containsKey(userName)) //if customer was already registered.
+        if (dataBase.getUserNameToCustomer().containsKey(userName)) //if customer was already registered.
             return new ErrorMessage((short) 1);
 
         else { // if username is not already registered
             customer.setUserName(userName);
             customer.setPassword(password);
-            dataMap.put(userName, customer); // put it in the data map
+            dataBase.getUserNameToCustomer().put(userName, customer); // put it in the data map
             //todo: do we need to think about problems caused by multiThreading? what if two clients register at the same time with the same user name?
 
             return new AckMessage((short) 1, null);

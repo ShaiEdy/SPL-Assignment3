@@ -34,10 +34,10 @@ public class PostMessage extends Message {
 
     @Override
     protected Message act(ConcurrentHashMap<String, Customer> dataMap, Customer customer) {
-        if (customer.isLoggedIn()){ // if customer is logged
+        if (customer.isLoggedIn()) { // if customer is logged
 
         }
-        return new ErrorMessage((short)5);
+        return new ErrorMessage((short) 5);
         //todo: remember to check if user is registered before sending message
 
     }
