@@ -27,7 +27,6 @@ public class PMMessage extends Message {
        customer.addPM(content);
        NotificationMessage notificationMessage= new NotificationMessage();
 
-
-       return new NotificationMessage<>();
+        return null;
     }
 }

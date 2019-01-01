@@ -17,7 +17,6 @@ public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol<T> {
         this.shouldTerminate = false;
         this.customer = new Customer();
     }
-
     /**
      * Used to initiate the current client protocol with it's personal connection ID and the connections implementation
      **/
@@ -32,6 +31,7 @@ public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol<T> {
     public void process(T message) { // get a specific message that was created in encoder decoder
         //use here the act messages of the messages for doing the specific process that needed
         //we will send back a response using connections.
+
     }
 
     /**

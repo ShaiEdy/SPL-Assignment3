@@ -1,6 +1,10 @@
 package bgu.spl.net.impl.messages;
 
-public class StatMessage <T> extends Message<T> {
+import bgu.spl.net.api.Customer;
+
+import java.util.concurrent.ConcurrentHashMap;
+
+public class StatMessage extends Message {
     private String userName;
 
     public StatMessage(byte[] messageBytesArray) {
@@ -12,7 +16,7 @@ public class StatMessage <T> extends Message<T> {
     }
 
     @Override
-    public T act(T message) {
+    protected Message act(ConcurrentHashMap<String, Customer> dataMap, Customer customer) {
         return null;
     }
 }

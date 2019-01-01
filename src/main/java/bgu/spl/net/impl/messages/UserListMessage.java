@@ -1,8 +1,13 @@
 package bgu.spl.net.impl.messages;
 
-public class UserListMessage <T> extends Message<T> {
+import bgu.spl.net.api.Customer;
+
+import java.util.concurrent.ConcurrentHashMap;
+
+public class UserListMessage extends Message {
+
     @Override
-    public T act(T message) {
+    protected Message act(ConcurrentHashMap<String, Customer> dataMap, Customer customer) {
         return null;
     }
 }

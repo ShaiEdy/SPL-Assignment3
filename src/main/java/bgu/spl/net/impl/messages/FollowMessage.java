@@ -40,7 +40,7 @@ public class FollowMessage extends Message {
     protected Message act(ConcurrentHashMap<String, Customer> dataMap, Customer thisCustomer) {
         List<String> successList = new Vector();
         Integer successNum = 0;
-        if (thisCustomer != null && thisCustomer.isLogin()) {
+        if (thisCustomer != null && thisCustomer.isLoggedIn()) {
             for (String userName : userNameList) { // follow/ unFollow each customer in the list
                 Customer otherCustomer = dataMap.get(userName); // customer from the list to un/follow
                 if (otherCustomer != null) { //the user with this name is register

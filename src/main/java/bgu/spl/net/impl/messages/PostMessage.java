@@ -35,6 +35,6 @@ public class PostMessage extends Message {
     protected Message act(ConcurrentHashMap<String, Customer> dataMap, Customer customer) {
         //todo: remember to check if user is registered before sending message
 
-
+    return null;
     }
 }

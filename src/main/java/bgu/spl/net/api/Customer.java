@@ -1,5 +1,6 @@
 package bgu.spl.net.api;
 
+import java.io.FileOutputStream;
 import java.util.List;
 import java.util.Vector;
 
@@ -83,4 +84,17 @@ public class Customer {
     public void setConnectionID(int connectionID) {
         this.connectionID = connectionID;
     }
+
+    //-------------others---------------------------------
+
+    public void addFollowing (Customer customer){
+        following.add(customer);
+    }
+    public void removeFollowing (Customer customer){
+        following.remove(customer);
+    }
+    public void addPM(String content){
+        PMs.add(content); //todo think if content is enough or you want also the sender
+    }
+
 }
