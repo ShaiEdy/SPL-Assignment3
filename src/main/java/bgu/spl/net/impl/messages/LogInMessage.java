@@ -38,7 +38,7 @@ public class LogInMessage extends Message {
                 Customer customerToLogIn = dataMap.get(userName); // we get the customer that we should log in. notice that customer in the signature is not necesserily the actual customer and might be empty
                 if (!customerToLogIn.isLoggedIn() && customerToLogIn.getPassword().equals(password)) { // if other client didn't already logged in to it and the password is fine.
                     customer = customerToLogIn; // we want the protocol's customer to be the actual one that is going to be logged in.
-                    customer.setConnectionID(connectionID); //we keep the old connectionID that was in the protocol.
+                    customer.setConnectionID(connectionID); //we want the connectionID to be the one that we received from the accept.
                     customer.setLoggedIn(true);
                     return new AckMessage((short) 2, null);
                 }
