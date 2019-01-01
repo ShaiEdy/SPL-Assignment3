@@ -36,12 +36,6 @@ public class FollowMessage extends Message {
         return result;
     }
 
-    private byte[] shortToBytes(short num){
-        byte[] bytesArr = new byte[2];
-        bytesArr[0] = (byte)((num >> 8) & 0xFF);
-        bytesArr[1] = (byte)(num & 0xFF);
-        return bytesArr;
-    }
 
     @Override
     protected Message act(DataBase dataBase, Customer thisCustomer) {

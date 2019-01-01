@@ -105,6 +105,10 @@ public class Customer {
         followingMe.remove(customer);
     }
 
+    public int getNumOfFollowers(){
+        return followingMe.size();
+    }
+
     public void addFollowing(Customer customer) {
         followedByMe.add(customer);
     }
@@ -113,11 +117,19 @@ public class Customer {
         followedByMe.remove(customer);
     }
 
+    public int getNumOfFollowing(){
+        return followingMe.size();
+    }
+
     public void addPM(String content) {
         PMs.add(content); //todo think if content is enough or you want also the sender
     }
 
     public void addPost(String content) {
         posts.add(content);
+    }
+
+    public int getNumOfPost (){
+        return posts.size();
     }
 }
