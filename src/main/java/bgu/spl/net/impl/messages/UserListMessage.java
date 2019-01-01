@@ -10,11 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class UserListMessage extends Message {
 
-    public UserListMessage(byte[] bytes) {
-        super();
-    }
-
-
+    public UserListMessage(byte[] bytes) {} //nothing special to build
 
     @Override
     protected Message act(DataBase dataBase, Customer customer) {
