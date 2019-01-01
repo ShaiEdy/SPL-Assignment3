@@ -1,8 +1,12 @@
 package bgu.spl.net.impl.messages;
 
 import bgu.spl.net.api.Customer;
+import bgu.spl.net.api.DataBase;
+import javafx.util.Pair;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class PostMessage extends Message {
@@ -33,12 +37,23 @@ public class PostMessage extends Message {
     }
 
     @Override
-    protected Message act(ConcurrentHashMap<String, Customer> dataMap, Customer customer) {
-        if (customer.isLoggedIn()) { // if customer is logged
-
+    protected Message act(DataBase dataBase, Customer customer) {
+        if (customer.isLoggedIn()) { // if customer is logged in
+            customer.addPost(content); // first we save the content of the new post to the dataBase
+            NotificationMessage notificationMessage = new NotificationMessage('1', customer.getUserName(), content);
+            List<Customer> followingMe = customer.getFollowing(); // we get the "who is following me" Vector
+            // we iterate //todo: Check if there might be a problem when iterating over the vector when some one else is try to follow me at the same time.
+            Vector<Customer> customersToSendNotificationToVector = new Vector<>(followingMe);
+            for (String userNameToSendNotificationTo : userToPost) { // we iterate //todo: Check if there might be a problem when iterating over the vector when some one else is try to follow me at the same time.
+                Customer customerToSendNotificationTo = dataBase.getUserNameToCustomer().get(userNameToSendNotificationTo);
+                if (!customersToSendNotificationToVector.contains(customerToSendNotificationTo)) // we want to add him to the vector only if he is not already there. because we dont want someone to get two notifications.
+                    customersToSendNotificationToVector.add(customerToSendNotificationTo);
+            }
+            ConcurrentHashMap<String, Pair<NotificationMessage, Vector<Customer>>> userNameToNotificationSendList = dataBase.getUserNameToNotificationSendList(); // we get the map where we will put the customer that should be notified
+            userNameToNotificationSendList.put(customer.getUserName(), new Pair<>(notificationMessage, customersToSendNotificationToVector));
+            return new AckMessage((short) 5, null);
         }
         return new ErrorMessage((short) 5);
         //todo: remember to check if user is registered before sending message
-
     }
 }
