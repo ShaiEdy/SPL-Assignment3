@@ -1,6 +1,7 @@
 package bgu.spl.net.impl.messages;
 
 import bgu.spl.net.api.Customer;
+import bgu.spl.net.api.DataBase;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -27,6 +28,14 @@ public class PMMessage extends Message {
        customer.addPM(content);
        NotificationMessage notificationMessage= new NotificationMessage();
 
+        return null;
+    }
+
+    @Override
+    protected Message act(DataBase dataBase, Customer customer) {
+        dataBase.getUserNameToCustomer().get(userName).addPM(content);
+        customer.addPM(content);
+        NotificationMessage notificationMessage= new NotificationMessage((char) 0,userName, content);
         return null;
     }
 }
