@@ -76,17 +76,4 @@ public class FollowMessage extends Message {
         } else return new ErrorMessage((short) 4);
     }
 
-    private byte[] merge2Arrays(byte[] arr1, byte[] arr2) {
-        byte[] toReturn = new byte[arr1.length + arr2.length];
-        int index = 0;
-        for (byte b : arr1) {
-            toReturn[index] = b;
-            index++;
-        }
-        for (byte b : arr2) {
-            toReturn[index] = b;
-            index++;
-        }
-        return toReturn;
-    }
 }

@@ -15,11 +15,13 @@ public class UserListMessage extends Message {
             return new ErrorMessage((short) 7);
         }
         Set<String> registerNamesSet = dataBase.getUserNameToCustomer().keySet();
-        Integer numOfRegisters = registerNamesSet.size(); //num of registersUsers
-        String registerListString = numOfRegisters.toString();//String that will be send as optional bytes array
+        byte[] numOfRegistersBytesArr = shortToBytes((short) registerNamesSet.size());//num of registersUsers
+        String registerListString = "";//String that will be send as optional bytes array
         for (String name : registerNamesSet) {
             registerListString += name + "\0";  //filling the string with the names of the register users
         }
-        return new AckMessage((short) 7, registerListString.getBytes()); //string converted to array bytes
+        byte[] ackMessageOptionalArr = merge2Arrays(numOfRegistersBytesArr, registerListString.getBytes());
+
+        return new AckMessage((short) 7, ackMessageOptionalArr); //string converted to array bytes
     }
 }
