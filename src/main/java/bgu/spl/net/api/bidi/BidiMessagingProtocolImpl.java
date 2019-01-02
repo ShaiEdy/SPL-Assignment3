@@ -43,7 +43,12 @@ public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol<T> {
             Vector<Customer> usersVector = notificationAndUsersVector.getValue(); // second
             NotificationMessage notificationMessage= notificationAndUsersVector.getKey(); // first
             for (Customer notificationUser: usersVector){
-                connections.send(notificationUser.getConnectionID(),notificationMessage); //send notification that needed to be send
+                if (notificationUser.isLoggedIn()) {
+                    connections.send(notificationUser.getConnectionID(), notificationMessage); //send notification that needed to be send
+                }
+                else{
+
+                }
             //todo- clean the vector
                 // todo - make sure to send only if logged in and if not think what to do
             }

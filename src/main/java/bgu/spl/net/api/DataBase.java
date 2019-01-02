@@ -11,10 +11,11 @@ public class DataBase {
     //This dataMap is from each userName that was registered to a specific Customer Object.
     private ConcurrentHashMap<String, Pair<NotificationMessage, Vector<Customer>>> userNameToNotificationSendList;
     //This dataMap is from a userName of the sender (of the Post or PM) to the list of customers that should receive the Notification.
-
+    private ConcurrentHashMap<String, Vector<NotificationMessage>> notificationsToBeSendInLogin;
     public DataBase() {
         userNameToCustomer = new ConcurrentHashMap<>();
         userNameToNotificationSendList = new ConcurrentHashMap<>();
+        notificationsToBeSendInLogin= new ConcurrentHashMap<>();
     }
 
     public ConcurrentHashMap<String, Customer> getUserNameToCustomer() {
