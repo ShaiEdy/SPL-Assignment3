@@ -65,7 +65,7 @@ public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol<T> {
             }
             notificationMessageVector.clear();
         }
-        dataBase.getUserNameToNotificationSendList().
+        dataBase.getUserNameToNotificationSendList();
     }
 
     /**
