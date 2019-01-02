@@ -36,23 +36,36 @@ public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol<T> {
     public void process(T message) {// get a specific message that was created in encoder decoder
         //use here the act messages of the messages for doing the specific process that needed
         //we will send back a response using connections.
+
+        // dealing with notification has to be send to list of customers
         Message newMessage= ((Message)message).act(dataBase,customer);
         connections.send(connectionId,newMessage); // send ack/ error to the client
         Pair<NotificationMessage, Vector<Customer> > notificationAndUsersVector= dataBase.getUserNameToNotificationSendList().get(customer.getUserName());
-        if (notificationAndUsersVector!=null){ // the pair is exist
+        if (notificationAndUsersVector!=null){ // the pair is exist (I caused notification)
             Vector<Customer> usersVector = notificationAndUsersVector.getValue(); // second
             NotificationMessage notificationMessage= notificationAndUsersVector.getKey(); // first
-            for (Customer notificationUser: usersVector){
-                if (notificationUser.isLoggedIn()) {
-                    connections.send(notificationUser.getConnectionID(), notificationMessage); //send notification that needed to be send
+            for (Customer otherUser: usersVector){
+                if (otherUser.isLoggedIn()) {
+                    connections.send(otherUser.getConnectionID(), notificationMessage); //send notification that needed to be send
                 }
                 else{
-
+                    dataBase.getNotificationsToBeSendInLogin().get(otherUser.getUserName()).add(notificationMessage);
+                    //for un-logeIn customer, we add this notification to the list of notification to be send in the future
                 }
-            //todo- clean the vector
-                // todo - make sure to send only if logged in and if not think what to do
-            }
+              }
+            dataBase.getUserNameToNotificationSendList().remove(customer.getUserName()); //delete from the hash map the customer that sent notification and we already deal with, remove the key and the value (pair)
+
         }
+        Vector<NotificationMessage> notificationMessageVector= dataBase.getNotificationsToBeSendInLogin().get(customer.getUserName());
+        if (notificationMessageVector!=null &&!notificationMessageVector.isEmpty()){
+        //mean this client has notification "waiting" to be send to him
+            for (NotificationMessage notificationMessage: notificationMessageVector){
+                connections.send(customer.getConnectionID(),notificationMessage);
+                //send the customer all the needed notification that waited
+            }
+            notificationMessageVector.clear();
+        }
+        dataBase.getUserNameToNotificationSendList().
     }
 
     /**
