@@ -25,4 +25,8 @@ public class DataBase {
     public ConcurrentHashMap<String, Pair<NotificationMessage, Vector<Customer>>> getUserNameToNotificationSendList() {
         return userNameToNotificationSendList;
     }
+
+    public ConcurrentHashMap<String, Vector<NotificationMessage>> getNotificationsToBeSendInLogin() {
+        return notificationsToBeSendInLogin;
+    }
 }
