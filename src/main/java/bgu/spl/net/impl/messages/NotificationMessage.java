@@ -6,12 +6,12 @@ import bgu.spl.net.api.DataBase;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class NotificationMessage extends Message {
-    private char NotificationType; // indicates whether the message is a PM message (0) or a public message (post) (1).
+    private byte NotificationType; // indicates whether the message is a PM message (0) or a public message (post) (1).
     private String postingUser;
     private String content;
 
     public NotificationMessage(byte[] messageBytesArray) { //todo maybe delete
-        NotificationType= (char)messageBytesArray[2];
+        NotificationType= messageBytesArray[2];
         int index= 3;
         while (messageBytesArray[index]!='\0'){  //complete the user name string
             postingUser+=Byte.toString(messageBytesArray[index]);
@@ -24,12 +24,11 @@ public class NotificationMessage extends Message {
         }
     }
 
-    public NotificationMessage(char NotificationType, String postingUser, String content) {
+    public NotificationMessage(byte NotificationType, String postingUser, String content) {
         this.NotificationType = NotificationType;
         this.postingUser = postingUser;
         this.content = content;
     }
-
 
     @Override
     public Message act(DataBase dataBase, Customer customer) {

@@ -33,7 +33,7 @@ public class PMMessage extends Message {
             String senderUserName = customer.getUserName();
             dataBase.getUserNameToCustomer().get(userNameToSendPM).addPM(content); //add to the receiver
             customer.addPM(content); // add to the sender //todo think if content or this
-            NotificationMessage notificationMessage = new NotificationMessage((char) 0, senderUserName, content);
+            NotificationMessage notificationMessage = new NotificationMessage((byte) 0, senderUserName, content);
             Vector<Customer> vectorOfReceivers = new Vector<>();
             Customer receivedCustomer = dataBase.getUserNameToCustomer().get(userNameToSendPM);
             vectorOfReceivers.add(receivedCustomer);

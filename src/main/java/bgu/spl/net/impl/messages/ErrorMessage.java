@@ -6,15 +6,10 @@ import bgu.spl.net.api.DataBase;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ErrorMessage extends Message {
-    short messageOpcode = 11;
-    short otherMessageOpcode;
+    private short otherMessageOpcode;
 
     public ErrorMessage(short otherMessageOpcode) {
         this.otherMessageOpcode = otherMessageOpcode;
-    }
-
-    public short getMessageOpcode() {
-        return messageOpcode;
     }
 
     public short getOtherMessageOpcode() {

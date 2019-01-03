@@ -8,7 +8,8 @@ public class MessageEncoderDecoderImp<T> implements MessageEncoderDecoder<T> { /
     private byte[] bytes = new byte[1 << 10]; //start with 1k
     private int len = 0;
 
-    public MessageEncoderDecoderImp() {}
+    public MessageEncoderDecoderImp() {
+    }
 
     @Override
     public T decodeNextByte(byte nextByte) {
@@ -48,8 +49,27 @@ public class MessageEncoderDecoderImp<T> implements MessageEncoderDecoder<T> { /
 
     @Override
     public byte[] encode(T message) {
-        return new byte[0];
-        //todo: implement
+        //this method gets one of the following: Ack/Error/Notification Message and changes it to array of bytes.
+        byte[] toReturn;
+        if (message instanceof ErrorMessage) {
+            byte[] errorMessageOpcodeBytesArr = shortToBytes((short) 11);
+            byte[] otherMessageOpcodeBytesArr = shortToBytes(((ErrorMessage) message).getOtherMessageOpcode());
+            toReturn = merge2Arrays(errorMessageOpcodeBytesArr,otherMessageOpcodeBytesArr);
+
+        }
+        else if (message instanceof AckMessage) {
+            byte[] notificationMessageOpcodeBytesArr = shortToBytes((short) 10);
+            byte[] otherMessageOpcodeBytesArr = shortToBytes(((AckMessage) message).getOtherMessageOpcode());
+            toReturn = merge2Arrays(notificationMessageOpcodeBytesArr,otherMessageOpcodeBytesArr);
+            byte[] optionalBytesArr = ((AckMessage) message).getOptionalBytesArray();
+            toReturn = merge2Arrays(toReturn,optionalBytesArr);
+        }
+        else{ //if message is NotificationMessage
+            byte[] notificationMessageOpcodeBytesArr = shortToBytes((short) 9);
+            byte[] otherMessageOpcodeBytesArr = shortToBytes(((AckMessage) message).getOtherMessageOpcode());
+        }
+
+        return toReturn;
     }
 
     private short bytesToShort(byte[] byteArr) {
@@ -57,6 +77,27 @@ public class MessageEncoderDecoderImp<T> implements MessageEncoderDecoder<T> { /
         short result = (short) ((byteArr[0] & 0xff) << 8);
         result += (short) (byteArr[1] & 0xff);
         return result;
+    }
+
+    private byte[] shortToBytes(short num) {
+        byte[] bytesArr = new byte[2];
+        bytesArr[0] = (byte) ((num >> 8) & 0xFF);
+        bytesArr[1] = (byte) (num & 0xFF);
+        return bytesArr;
+    }
+
+    protected byte[] merge2Arrays(byte[] arr1, byte[] arr2) {
+        byte[] toReturn = new byte[arr1.length + arr2.length];
+        int index = 0;
+        for (byte b : arr1) {
+            toReturn[index] = b;
+            index++;
+        }
+        for (byte b : arr2) {
+            toReturn[index] = b;
+            index++;
+        }
+        return toReturn;
     }
 
 }

@@ -15,6 +15,12 @@ public abstract class Message { //todo: check if we need to implement something?
         return bytesArr;
     }
 
+    protected short bytesToShort(byte[] byteArr) {
+        short result = (short) ((byteArr[0] & 0xff) << 8);
+        result += (short) (byteArr[1] & 0xff);
+        return result;
+    }
+
     protected byte[] merge2Arrays(byte[] arr1, byte[] arr2) {
         byte[] toReturn = new byte[arr1.length + arr2.length];
         int index = 0;
