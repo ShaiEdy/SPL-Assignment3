@@ -6,7 +6,11 @@ import bgu.spl.net.api.DataBase;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class LogOutMessage extends Message {
-    public LogOutMessage(byte[] bytes) {}//there is nothing special to build
+    private short opcode= 2;
+
+    public LogOutMessage(byte[] bytes) {
+        super((short)2);
+    }//there is nothing special to build
 
 
     @Override

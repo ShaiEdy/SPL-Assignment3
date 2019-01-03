@@ -2,8 +2,7 @@ package bgu.spl.net.api.bidi;
 
 import bgu.spl.net.api.Customer;
 import bgu.spl.net.api.DataBase;
-import bgu.spl.net.impl.messages.Message;
-import bgu.spl.net.impl.messages.NotificationMessage;
+import bgu.spl.net.impl.messages.*;
 import javafx.util.Pair;
 
 import java.util.Vector;
@@ -34,12 +33,12 @@ public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol<T> {
 
     @Override
     public void process(T message) {// get a specific message that was created in encoder decoder
-        //use here the act messages of the messages for doing the specific process that needed
+        //we use here the act messages of the messages for doing the specific process that needed
         //we will send back a response using connections.
-
-        // dealing with notification has to be send to list of customers
         Message newMessage= ((Message)message).act(dataBase,customer);
         connections.send(connectionId,newMessage); // send ack/ error to the client
+
+        //--------dealing with notification has to be send to list of customers------//
         Pair<NotificationMessage, Vector<Customer> > notificationAndUsersVector= dataBase.getUserNameToNotificationSendList().get(customer.getUserName());
         if (notificationAndUsersVector!=null){ // the pair is exist (I caused notification)
             Vector<Customer> usersVector = notificationAndUsersVector.getValue(); // second
@@ -54,18 +53,24 @@ public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol<T> {
                 }
               }
             dataBase.getUserNameToNotificationSendList().remove(customer.getUserName()); //delete from the hash map the customer that sent notification and we already deal with, remove the key and the value (pair)
-
         }
-        Vector<NotificationMessage> notificationMessageVector= dataBase.getNotificationsToBeSendInLogin().get(customer.getUserName());
-        if (notificationMessageVector!=null &&!notificationMessageVector.isEmpty()){
-        //mean this client has notification "waiting" to be send to him
-            for (NotificationMessage notificationMessage: notificationMessageVector){
-                connections.send(customer.getConnectionID(),notificationMessage);
-                //send the customer all the needed notification that waited
+        //----dealing with notification "wait" to be send to a client that log in---//
+        if (message instanceof LogInMessage) {
+            Vector<NotificationMessage> notificationMessageVector = dataBase.getNotificationsToBeSendInLogin().get(customer.getUserName());
+            if (notificationMessageVector != null && !notificationMessageVector.isEmpty()) {
+                //mean this client has notification "waiting" to be send to him
+                for (NotificationMessage notificationMessage : notificationMessageVector) {
+                    connections.send(customer.getConnectionID(), notificationMessage);
+                    //send the customer all the needed notification that waited
+                }
+                notificationMessageVector.clear();
             }
-            notificationMessageVector.clear();
         }
-        dataBase.getUserNameToNotificationSendList();
+        //-----------case of logOut- dealing with terminate the connection--------------//
+        if (message instanceof LogOutMessage){
+            if (newMessage instanceof AckMessage)shouldTerminate=true;
+            //only if logout succeed (we send the client log out ack) so we terminate
+        }
     }
 
     /**

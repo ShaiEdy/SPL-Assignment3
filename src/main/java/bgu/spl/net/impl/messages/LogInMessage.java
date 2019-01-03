@@ -6,12 +6,15 @@ import bgu.spl.net.api.DataBase;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class LogInMessage extends Message {
+    private short opcode= 2;
     private int arrayLength;
     private int index = 2; // represents the index we are currently looking at. starts from 2 because we dont care about the Opcode.
     private String userName = "";
     private String password = "";
 
     public LogInMessage(byte[] messageBytesArray) {
+        super((short)2);
+
         this.arrayLength = messageBytesArray.length;
 
         appendToString(messageBytesArray, userName);

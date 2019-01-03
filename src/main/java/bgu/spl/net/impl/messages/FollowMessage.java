@@ -8,11 +8,13 @@ import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class FollowMessage extends Message {
+    private short opcode= 4;
     private Boolean follow; //(true=follow, false= unFollow)
     private short numOfUsers;
     private List<String> userNameList;
 
     public FollowMessage(byte[] messageBytesArray) {
+        super((short)4);
         userNameList = new Vector<>();
         if (messageBytesArray[2] == 0) follow = true;
         else follow = false;

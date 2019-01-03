@@ -6,10 +6,12 @@ import bgu.spl.net.api.DataBase;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class AckMessage extends Message {
+    private short opcode=10;
     private short otherMessageOpcode;
     private byte[] optionalBytesArray;
 
     public AckMessage(byte[] messageByteArray) { //todo- decide if needed
+        super((short) 10);
         byte[] byteArrMsgOpcose = {messageByteArray[2], messageByteArray[3]};
         otherMessageOpcode = bytesToShort(byteArrMsgOpcose);
         int index = 4;
@@ -22,6 +24,7 @@ public class AckMessage extends Message {
     }
 
     public AckMessage(short otherMessageOpcode, byte[] optionalBytesArray) {
+        super((short) 10);
         this.otherMessageOpcode = otherMessageOpcode;
         if (optionalBytesArray != null) this.optionalBytesArray = optionalBytesArray;
         else this.optionalBytesArray = new byte[0];

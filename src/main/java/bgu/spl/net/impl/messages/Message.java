@@ -3,16 +3,25 @@ package bgu.spl.net.impl.messages;
 import bgu.spl.net.api.Customer;
 import bgu.spl.net.api.DataBase;
 
-public abstract class Message { //todo: check if we need to implement something? closeable?
+import static bgu.spl.net.api.bidi.MessageEncoderDecoderImp.getBytes;
 
+public  class Message implements MessageInterface{ //todo: check if we need to implement something? closeable?
+    short opcode;
 
-    public abstract Message act(DataBase dataBase, Customer customer);
+    public Message(short opcode) {
+        this.opcode= opcode;
+    }
+
+    public  Message act(DataBase dataBase, Customer customer){return null;}
+
+    @Override
+    public short getOpcode() {
+        return opcode;
+    }
+
 
     protected byte[] shortToBytes(short num){
-        byte[] bytesArr = new byte[2];
-        bytesArr[0] = (byte)((num >> 8) & 0xFF);
-        bytesArr[1] = (byte)(num & 0xFF);
-        return bytesArr;
+        return getBytes(num);
     }
 
     protected short bytesToShort(byte[] byteArr) {
@@ -22,17 +31,7 @@ public abstract class Message { //todo: check if we need to implement something?
     }
 
     protected byte[] merge2Arrays(byte[] arr1, byte[] arr2) {
-        byte[] toReturn = new byte[arr1.length + arr2.length];
-        int index = 0;
-        for (byte b : arr1) {
-            toReturn[index] = b;
-            index++;
-        }
-        for (byte b : arr2) {
-            toReturn[index] = b;
-            index++;
-        }
-        return toReturn;
+        return getBytes(arr1, arr2);
     }
 
 }

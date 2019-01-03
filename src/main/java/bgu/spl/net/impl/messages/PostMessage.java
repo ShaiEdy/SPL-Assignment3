@@ -9,10 +9,12 @@ import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class PostMessage extends Message {
+    private short opcode= 5;
     private String content;
     private List<String> userToPost; //userList that have been tagged in the post
 
     public PostMessage(byte[] bytes) {
+        super((short)5);
         int index = 2;
         while (bytes[index] != '\0') {
             //while (index < bytes.length) { //while the content is'nt finished

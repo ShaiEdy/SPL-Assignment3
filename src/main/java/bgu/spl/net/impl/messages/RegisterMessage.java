@@ -6,12 +6,15 @@ import bgu.spl.net.api.DataBase;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class RegisterMessage extends Message {
+    private short opcode= 1;
     private int arrayLength;
     private String userName = "";
     private String password = "";
 
 
     public RegisterMessage(byte[] messageBytesArray) {
+        super((short)1);
+
         this.arrayLength = messageBytesArray.length;
 
         int index = 2; // represents the index we are currently looking at. starts from 2 because we dont care about the Opcode.

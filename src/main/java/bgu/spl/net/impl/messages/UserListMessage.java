@@ -5,8 +5,11 @@ import bgu.spl.net.api.DataBase;
 import java.util.Set;
 
 public class UserListMessage extends Message {
+    private short opcode= 7;
 
     public UserListMessage(byte[] bytes) {
+        super((short)7);
+
     } //nothing special to build
 
     @Override

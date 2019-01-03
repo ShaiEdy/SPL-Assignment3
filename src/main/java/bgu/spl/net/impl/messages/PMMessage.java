@@ -8,10 +8,12 @@ import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class PMMessage extends Message {
+    private short opcode= 6;
     String userNameToSendPM;
     String content;
 
     public PMMessage(byte [] bytes) {
+        super((short)6);
         int index=2;
         while (bytes[index]!='\0'){
             userNameToSendPM += Byte.toString((bytes[index]));  // we append the userName with the next byte.
@@ -41,6 +43,7 @@ public class PMMessage extends Message {
             dataBase.getUserNameToNotificationSendList().put(senderUserName, pair);
             /// all this for creating notification that will be send by process of protocol
             return new AckMessage((short) 6, null);
+        // todo change to byte
         }
     }
 }

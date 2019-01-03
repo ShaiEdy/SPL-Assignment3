@@ -5,9 +5,12 @@ import bgu.spl.net.api.DataBase;
 
 
 public class StatMessage extends Message {
+    private short opcode= 8;
     private String userName; // the user name of the user we want to get his status
 
     public StatMessage(byte[] messageBytesArray) {
+        super((short)8);
+
         int index= 2;
         while (messageBytesArray[index]!='\0'){  //complete the user name string
             userName+=Byte.toString(messageBytesArray[index]);

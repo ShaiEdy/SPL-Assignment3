@@ -3,16 +3,19 @@ package bgu.spl.net.api.bidi;
 import bgu.spl.net.api.MessageEncoderDecoder;
 import bgu.spl.net.impl.messages.*;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Vector;
 
-public class MessageEncoderDecoderImp<T> implements MessageEncoderDecoder<T> { //T is message
-    private byte[] bytes = new byte[1 << 10]; //start with 1k
+
+public class MessageEncoderDecoderImp<Message> implements MessageEncoderDecoder<Message> { //T is message
+    private byte[] bytes = new byte[1 << 10]; //start with 1k //todo think
     private int len = 0;
 
     public MessageEncoderDecoderImp() {
     }
 
     @Override
-    public T decodeNextByte(byte nextByte) {
+    public Message decodeNextByte(byte nextByte) {
         if (nextByte == '\n') {
             pushByte(nextByte);
             return popMessage();
@@ -21,21 +24,19 @@ public class MessageEncoderDecoderImp<T> implements MessageEncoderDecoder<T> { /
         return null; //not a line yet
     }
 
-    private T popMessage() { // we enter popMessage only when the message is done.
+    @SuppressWarnings("unchecked")
+    private Message popMessage() { // we enter popMessage only when the message is done.
         len = 0;
         //todo- should I "clean" the  bytes array? (they do not clean it in echo)
-
         short opcode = bytesToShort(bytes); //first we need to get the opcode from the first two byte.
-
-        if (opcode == 1) return (T) new RegisterMessage(bytes);
-        else if (opcode == 2) return (T) new LogInMessage(bytes);
-        else if (opcode == 3) return (T) new LogOutMessage(bytes);
-        else if (opcode == 4) return (T) new FollowMessage(bytes);
-        else if (opcode == 5) return (T) new PostMessage(bytes);
-        else if (opcode == 6) return (T) new PMMessage(bytes);
-        else if (opcode == 7) return (T) new UserListMessage(bytes);
-        else if (opcode == 8) return (T) new StatMessage(bytes);
-
+        if (opcode == 1){ return (Message)new RegisterMessage(bytes); }
+        else if (opcode == 2) return (Message) new LogInMessage(bytes);
+        else if (opcode == 3) return (Message) new LogOutMessage(bytes);
+        else if (opcode == 4) return (Message) new FollowMessage(bytes);
+        else if (opcode == 5) return (Message) new PostMessage(bytes);
+        else if (opcode == 6) return (Message) new PMMessage(bytes);
+        else if (opcode == 7) return (Message) new UserListMessage(bytes);
+        else if (opcode == 8) return (Message) new StatMessage(bytes);
         return null;
     }
 
@@ -48,28 +49,59 @@ public class MessageEncoderDecoderImp<T> implements MessageEncoderDecoder<T> { /
     }
 
     @Override
-    public byte[] encode(T message) {
+    public byte[] encode(Message message) {
         //this method gets one of the following: Ack/Error/Notification Message and changes it to array of bytes.
-        byte[] toReturn;
+        List<Byte> bytesToReturn= new Vector<>();
+        byte[] ArrayToReturn;
+
+        //---------------ErrorMessage------------//
         if (message instanceof ErrorMessage) {
             byte[] errorMessageOpcodeBytesArr = shortToBytes((short) 11);
             byte[] otherMessageOpcodeBytesArr = shortToBytes(((ErrorMessage) message).getOtherMessageOpcode());
-            toReturn = merge2Arrays(errorMessageOpcodeBytesArr,otherMessageOpcodeBytesArr);
-
+            ArrayToReturn = merge2Arrays(errorMessageOpcodeBytesArr,otherMessageOpcodeBytesArr);
         }
+        //---------------AckMessage------------//
         else if (message instanceof AckMessage) {
             byte[] notificationMessageOpcodeBytesArr = shortToBytes((short) 10);
             byte[] otherMessageOpcodeBytesArr = shortToBytes(((AckMessage) message).getOtherMessageOpcode());
-            toReturn = merge2Arrays(notificationMessageOpcodeBytesArr,otherMessageOpcodeBytesArr);
+            ArrayToReturn = merge2Arrays(notificationMessageOpcodeBytesArr,otherMessageOpcodeBytesArr);
             byte[] optionalBytesArr = ((AckMessage) message).getOptionalBytesArray();
-            toReturn = merge2Arrays(toReturn,optionalBytesArr);
+            ArrayToReturn = merge2Arrays(ArrayToReturn,optionalBytesArr);
         }
+        //---------------NotificationMessage-----//
         else{ //if message is NotificationMessage
-            byte[] notificationMessageOpcodeBytesArr = shortToBytes((short) 9);
-            byte[] otherMessageOpcodeBytesArr = shortToBytes(((AckMessage) message).getOtherMessageOpcode());
+            bytesToReturn.addAll(convertbytesArrayToBytesList(shortToBytes((short) 9)));// add the opcode bytes
+            bytesToReturn.add(((NotificationMessage) message).getNotificationType());// add the notification type
+            String postingUser= ((NotificationMessage) message).getPostingUser();
+            bytesToReturn.addAll(convertbytesArrayToBytesList(postingUser.getBytes()));//add posting user name
+            bytesToReturn.add((byte) '\0');
+            String content= ((NotificationMessage) message).getContent();
+            bytesToReturn.addAll(convertbytesArrayToBytesList(content.getBytes())); // add the content
+            bytesToReturn.add((byte) '\0');
+            ArrayToReturn= convertListToArray(bytesToReturn); //convert to byte[]
         }
 
-        return toReturn;
+        return ArrayToReturn;
+    }
+
+    private byte[] convertListToArray(List<Byte> bytes){
+        byte[] bytestoreturn= new byte[bytes.size()];
+        int index=0;
+        for (Byte Byte: bytes){
+            bytestoreturn[index]= Byte;
+            index++;
+        }
+        return bytestoreturn;
+    }
+
+    private List<Byte> convertbytesArrayToBytesList(byte[] bytes){
+        Byte[] Bytes = new Byte[bytes.length];
+        int index=0;
+        for(byte b: bytes) {
+            Bytes[index++] = b;
+            index++;
+        }
+        return Arrays.asList(Bytes);
     }
 
     private short bytesToShort(byte[] byteArr) {
@@ -80,13 +112,21 @@ public class MessageEncoderDecoderImp<T> implements MessageEncoderDecoder<T> { /
     }
 
     private byte[] shortToBytes(short num) {
+        return getBytes(num);
+    }
+
+    public static byte[] getBytes(short num) {
         byte[] bytesArr = new byte[2];
         bytesArr[0] = (byte) ((num >> 8) & 0xFF);
         bytesArr[1] = (byte) (num & 0xFF);
         return bytesArr;
     }
 
-    protected byte[] merge2Arrays(byte[] arr1, byte[] arr2) {
+    private byte[] merge2Arrays(byte[] arr1, byte[] arr2) {
+        return getBytes(arr1, arr2);
+    }
+
+    public static byte[] getBytes(byte[] arr1, byte[] arr2) {
         byte[] toReturn = new byte[arr1.length + arr2.length];
         int index = 0;
         for (byte b : arr1) {

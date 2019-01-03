@@ -43,7 +43,7 @@ public class NonBlockingConnectionHandler<T> implements ConnectionHandler<T> {
             ex.printStackTrace();
         }
 
-        if (success) {
+        if (success) { // only if there is connection with the client
             buf.flip();
             return () -> {
                 try {
