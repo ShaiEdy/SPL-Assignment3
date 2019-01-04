@@ -8,7 +8,7 @@ import javafx.util.Pair;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol<T> {
+public class BidiMessagingProtocolImpl implements BidiMessagingProtocol<Message> {
     private int connectionId;
     private Connections connections;
     private boolean shouldTerminate;
@@ -32,10 +32,11 @@ public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol<T> {
     }
 
     @Override
-    public void process(T message) {// get a specific message that was created in encoder decoder
+    public void process(Message message) {
+        // get a specific message that was created in encoder decoder
         //we use here the act messages of the messages for doing the specific process that needed
         //we will send back a response using connections.
-        Message newMessage= ((Message)message).act(dataBase,customer);
+        Message newMessage= message.act(dataBase,customer);
         connections.send(connectionId,newMessage); // send ack/ error to the client
 
         //--------dealing with notification has to be send to list of customers------//
@@ -80,7 +81,6 @@ public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol<T> {
     public boolean shouldTerminate() {
         return shouldTerminate;
     }
-
 
     /**
      * @param byteArr- array of bytes represents the message

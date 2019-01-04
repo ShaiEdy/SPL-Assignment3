@@ -5,20 +5,19 @@ import bgu.spl.net.api.DataBase;
 
 import static bgu.spl.net.api.bidi.MessageEncoderDecoderImp.getBytes;
 
-public  class Message implements MessageInterface{ //todo: check if we need to implement something? closeable?
+public abstract class Message implements MessageInterface{ //todo: check if we need to implement something? closeable?
     short opcode;
 
     public Message(short opcode) {
         this.opcode= opcode;
     }
 
-    public  Message act(DataBase dataBase, Customer customer){return null;}
+    public abstract Message act(DataBase dataBase, Customer customer);
 
     @Override
     public short getOpcode() {
         return opcode;
     }
-
 
     protected byte[] shortToBytes(short num){
         return getBytes(num);

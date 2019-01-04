@@ -16,7 +16,6 @@ public class RegisterMessage extends Message {
         super((short)1);
 
         this.arrayLength = messageBytesArray.length;
-
         int index = 2; // represents the index we are currently looking at. starts from 2 because we dont care about the Opcode.
 
         appendToString(messageBytesArray, userName, index);

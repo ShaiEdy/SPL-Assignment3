@@ -7,36 +7,96 @@ import java.util.List;
 import java.util.Vector;
 
 
-public class MessageEncoderDecoderImp<Message> implements MessageEncoderDecoder<Message> { //T is message
+public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Message> { //T is message
     private byte[] bytes = new byte[1 << 10]; //start with 1k //todo think
     private int len = 0;
+    private short opcode = 0;
+    private int countNumOfZeros = 0; // we will use this counter to count \0 bytes
+    private int numOfUserCounter = 0; //we will use this counter to count users.
 
-    public MessageEncoderDecoderImp() {
-    }
+    public MessageEncoderDecoderImp() {}
 
     @Override
     public Message decodeNextByte(byte nextByte) {
-        if (nextByte == '\n') {
-            pushByte(nextByte);
-            return popMessage();
-        }
         pushByte(nextByte);
+        if (len==2)
+            opcode = bytesToShort(bytes);
+
+        if (opcode == 1 | opcode == 2){ // register or login.
+            Message toReturn = handleRegisterOrLoginMessage();
+            if (toReturn!=null) return toReturn;
+        }
+        if (opcode == 3){ // logout.
+            makeVariablesZero();
+            return new LogOutMessage(bytes);
+        }
+        if (opcode == 4){ // follow.
+            Message toReturn = handleFollowMessage();
+            if (toReturn!=null) return toReturn;
+        }
+        if (opcode == 5){ // Post
+            if (bytes[len]== '\0'){
+                makeVariablesZero();
+                return new PostMessage(bytes);
+            }
+        }
+        if (opcode==6) { // PM
+            Message toReturn = handlePM();
+            if (toReturn!=null) return toReturn;
+        }
+        if (opcode == 7) { // UserList
+            makeVariablesZero();
+            return new UserListMessage(bytes);
+        }
+        if (opcode == 8){ //Stat
+            if (bytes[len]== '\0'){
+                makeVariablesZero();
+                return new StatMessage(bytes);
+            }
+        }
+
         return null; //not a line yet
     }
 
-    @SuppressWarnings("unchecked")
-    private Message popMessage() { // we enter popMessage only when the message is done.
+    private Message handlePM() {
+        if (bytes[len] == '\0') countNumOfZeros++;
+        if (countNumOfZeros == 2) {
+            makeVariablesZero();
+            return new PMMessage(bytes);
+        }
+        return null;
+    }
+
+    private Message handleFollowMessage() {
+        if (len == 5) {
+            byte[] numOfUsersArr = new byte[2];
+            numOfUsersArr[0] = bytes[3];
+            numOfUsersArr[1] = bytes[4];
+            numOfUserCounter = bytesToShort(numOfUsersArr);
+        }
+        if (bytes[len] == '\0') {
+            countNumOfZeros++;
+            if (countNumOfZeros == numOfUserCounter + 1) {
+                makeVariablesZero();
+                return new FollowMessage(bytes);
+            }
+        }
+        return null;
+    }
+
+    private void makeVariablesZero(){
         len = 0;
-        //todo- should I "clean" the  bytes array? (they do not clean it in echo)
-        short opcode = bytesToShort(bytes); //first we need to get the opcode from the first two byte.
-        if (opcode == 1){ return (Message)new RegisterMessage(bytes); }
-        else if (opcode == 2) return (Message) new LogInMessage(bytes);
-        else if (opcode == 3) return (Message) new LogOutMessage(bytes);
-        else if (opcode == 4) return (Message) new FollowMessage(bytes);
-        else if (opcode == 5) return (Message) new PostMessage(bytes);
-        else if (opcode == 6) return (Message) new PMMessage(bytes);
-        else if (opcode == 7) return (Message) new UserListMessage(bytes);
-        else if (opcode == 8) return (Message) new StatMessage(bytes);
+        countNumOfZeros = 0;
+        numOfUserCounter = 0;
+    }
+
+    private Message handleRegisterOrLoginMessage(){
+        if (bytes[len]== '\0') countNumOfZeros ++;
+        if (countNumOfZeros == 2) {
+            makeVariablesZero();
+            if (opcode == 1) return new RegisterMessage(bytes);
+            else return new LogInMessage(bytes);
+        }
         return null;
     }
 
@@ -54,14 +114,15 @@ public class MessageEncoderDecoderImp<Message> implements MessageEncoderDecoder<
         List<Byte> bytesToReturn= new Vector<>();
         byte[] ArrayToReturn;
 
+        int opcode = message.getOpcode();
         //---------------ErrorMessage------------//
-        if (message instanceof ErrorMessage) {
+        if (opcode == 11) {
             byte[] errorMessageOpcodeBytesArr = shortToBytes((short) 11);
             byte[] otherMessageOpcodeBytesArr = shortToBytes(((ErrorMessage) message).getOtherMessageOpcode());
             ArrayToReturn = merge2Arrays(errorMessageOpcodeBytesArr,otherMessageOpcodeBytesArr);
         }
         //---------------AckMessage------------//
-        else if (message instanceof AckMessage) {
+        else if (opcode == 10) {
             byte[] notificationMessageOpcodeBytesArr = shortToBytes((short) 10);
             byte[] otherMessageOpcodeBytesArr = shortToBytes(((AckMessage) message).getOtherMessageOpcode());
             ArrayToReturn = merge2Arrays(notificationMessageOpcodeBytesArr,otherMessageOpcodeBytesArr);
