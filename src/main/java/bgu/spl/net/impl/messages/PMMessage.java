@@ -9,23 +9,43 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class PMMessage extends Message {
     private short opcode= 6;
+    byte[] userNameBytes;
+    byte[] contentBytes;
     String userNameToSendPM;
     String content;
 
     public PMMessage(byte [] bytes) {
         super((short)6);
-        int index=2;
-        while (bytes[index]!='\0'){
-            userNameToSendPM += Byte.toString((bytes[index]));  // we append the userName with the next byte.
+        int index=2; // index of the input bytes array
+        int userNameCounter=0;
+        int contentCounter=0;
+        int indexOfFirstLetter= index;
+        while (bytes[index]!='\0'){ // counting num of bytes for user name
+            userNameCounter++;
             index++;
         }
-        index++; //pass the \0 byte
-        while (bytes[index]!='\0'){
-            content += Byte.toString((bytes[index]));  // we append the content with the next byte.
-            index++;
+        userNameBytes= new byte[userNameCounter]; // creating array bytes for user name
+        for (int i = 0; i <userNameCounter ; i++) {
+            userNameBytes[i]= bytes[indexOfFirstLetter];
+            indexOfFirstLetter++;
         }
-    }
+        userNameToSendPM= userNameBytes.toString();
 
+        index++; //pass the \0 byte
+        indexOfFirstLetter++;
+        while (bytes[index]!='\0'){ // counting the bytes of content
+            contentCounter++;
+            index++;
+        }
+        contentBytes= new byte[contentCounter];
+        for (int i = 0; i <contentCounter ; i++) {
+            contentBytes[i]= bytes[indexOfFirstLetter];
+            indexOfFirstLetter++;
+        }
+
+        content= contentBytes.toString();
+
+    }
 
     @Override
     public Message act(DataBase dataBase, Customer customer) {
