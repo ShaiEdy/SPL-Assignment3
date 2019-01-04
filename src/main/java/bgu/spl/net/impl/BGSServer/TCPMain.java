@@ -20,5 +20,6 @@ public class TCPMain {
                     MessageEncoderDecoder<Message> encoderDecoder = new MessageEncoderDecoderImp();
                     return encoderDecoder;
                 });
+        baseServer.serve();
     }
 }

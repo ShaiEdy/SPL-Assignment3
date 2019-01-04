@@ -10,6 +10,7 @@ public class Customer {
     private String userName;
     private String password;
     private boolean isLoggedIn;
+    private boolean isRegistered;
     private List<Customer> followingMe;
     private List<Customer> followedByMe;
     private List<String> posts;
@@ -20,11 +21,14 @@ public class Customer {
 
     public Customer() {
         this.isLoggedIn = false;
+        this.isRegistered = false;
         this.followingMe = new Vector<>(); // todo- maybe other data structure ?
         this.followedByMe = new Vector<>(); // todo- maybe other data structure ?
         this.posts = new Vector<>();
         this.PMs = new Vector<>();
         this.connectionID = -1;
+        this.userName="";
+        this.password="";
     }
 
     //------------------getters--------------------------
@@ -61,6 +65,10 @@ public class Customer {
         return connectionID;
     }
 
+    public boolean isRegistered() {
+        return isRegistered;
+    }
+
     //------------------setters--------------------------
 
     public void setUserName(String userName) {
@@ -93,6 +101,10 @@ public class Customer {
 
     public void setConnectionID(int connectionID) {
         this.connectionID = connectionID;
+    }
+
+    public void setRegistered(boolean registered) {
+        isRegistered = registered;
     }
 
     //-------------others---------------------------------

@@ -51,6 +51,11 @@ public class BlockingConnectionHandler<T> implements Runnable, ConnectionHandler
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+        try {
+            close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -63,6 +68,11 @@ public class BlockingConnectionHandler<T> implements Runnable, ConnectionHandler
     public void send(T msg) {
         try {
             out.write(encdec.encode(msg)); //write to the CH outputStream
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
             out.flush();
         } catch (IOException e) {
             e.printStackTrace();

@@ -13,13 +13,13 @@ public class LogInMessage extends Message {
     private String password = "";
 
     public LogInMessage(byte[] messageBytesArray) {
-        super((short)2);
+        super((short) 2);
 
         this.arrayLength = messageBytesArray.length;
 
-        appendToString(messageBytesArray, userName);
-        index++;
-        appendToString(messageBytesArray, password);
+        userName = appendToString(messageBytesArray, index);
+        index = index + userName.length() + 1;
+        password = appendToString(messageBytesArray, index);
 
     }
 
@@ -27,11 +27,23 @@ public class LogInMessage extends Message {
     /**
      * Used to make a String of all the bytes from messageBytesArray[index] to the first /0 in messageBytesArray.
      **/
-    private void appendToString(byte[] messageBytesArray, String stringToAppendTo) {
+    private String appendToString(byte[] messageBytesArray, int index) {
+        String toReturn = "";
+        byte[] wordInByte;
+        int counter = 0;
+        int primaryIndex = index;
         while (messageBytesArray[index] != '\0') {
-            stringToAppendTo += Byte.toString(messageBytesArray[index]); // we append the userName with the next byte.
+            counter++;
             index++;
         }
+        wordInByte = new byte[counter];
+        index = primaryIndex;
+
+        for (int i = 0; i < counter; i++) {
+            wordInByte[i] = messageBytesArray[index];
+            index++;
+        }
+        return new String(wordInByte);
     }
 
     @Override

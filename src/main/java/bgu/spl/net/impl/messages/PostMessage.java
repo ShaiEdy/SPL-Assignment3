@@ -17,7 +17,6 @@ public class PostMessage extends Message {
         super((short)5);
         int index = 2;
         while (bytes[index] != '\0') {
-            //while (index < bytes.length) { //while the content is'nt finished
             if (Byte.toString(bytes[index]).equals("@")) { //we deal with @userName
                 index++; // we skip the "@" itself.
                 String userName = "";

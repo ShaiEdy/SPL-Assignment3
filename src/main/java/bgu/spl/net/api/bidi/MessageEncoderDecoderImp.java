@@ -19,47 +19,46 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Message> 
     @Override
     public Message decodeNextByte(byte nextByte) {
         pushByte(nextByte);
-        if (len==2)
+        if (len == 2)
             opcode = bytesToShort(bytes);
 
-        if (opcode == 1 | opcode == 2){ // register or login.
+        if (opcode == 1 | opcode == 2) { // register or login.
             Message toReturn = handleRegisterOrLoginMessage();
-            if (toReturn!=null) return toReturn;
+            if (toReturn != null) return toReturn;
         }
-        if (opcode == 3){ // logout.
+        if (opcode == 3) { // logout.
             makeVariablesZero();
             return new LogOutMessage(bytes);
         }
-        if (opcode == 4){ // follow.
+        if (opcode == 4) { // follow.
             Message toReturn = handleFollowMessage();
-            if (toReturn!=null) return toReturn;
+            if (toReturn != null) return toReturn;
         }
-        if (opcode == 5){ // Post
-            if (bytes[len]== '\0'){
+        if (opcode == 5) { // Post
+            if (bytes[len - 1] == '\0') {
                 makeVariablesZero();
                 return new PostMessage(bytes);
             }
         }
-        if (opcode==6) { // PM
+        if (opcode == 6) { // PM
             Message toReturn = handlePM();
-            if (toReturn!=null) return toReturn;
+            if (toReturn != null) return toReturn;
         }
         if (opcode == 7) { // UserList
             makeVariablesZero();
             return new UserListMessage(bytes);
         }
-        if (opcode == 8){ //Stat
-            if (bytes[len]== '\0'){
+        if (opcode == 8) { //Stat
+            if (bytes[len - 1] == '\0') {
                 makeVariablesZero();
                 return new StatMessage(bytes);
             }
         }
-
         return null; //not a line yet
     }
 
     private Message handlePM() {
-        if (bytes[len] == '\0') countNumOfZeros++;
+        if (bytes[len-1] == '\0') countNumOfZeros++;
         if (countNumOfZeros == 2) {
             makeVariablesZero();
             return new PMMessage(bytes);
@@ -74,7 +73,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Message> 
             numOfUsersArr[1] = bytes[4];
             numOfUserCounter = bytesToShort(numOfUsersArr);
         }
-        if (bytes[len] == '\0') {
+        if (bytes[len-1] == '\0') {
             countNumOfZeros++;
             if (countNumOfZeros == numOfUserCounter + 1) {
                 makeVariablesZero();
@@ -85,16 +84,18 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Message> 
     }
 
     private void makeVariablesZero(){
+        opcode = 0;
         len = 0;
         countNumOfZeros = 0;
         numOfUserCounter = 0;
     }
 
     private Message handleRegisterOrLoginMessage(){
-        if (bytes[len]== '\0') countNumOfZeros ++;
+        if (bytes[len-1]== '\0') countNumOfZeros ++;
         if (countNumOfZeros == 2) {
+            int opcodeTmp = opcode;
             makeVariablesZero();
-            if (opcode == 1) return new RegisterMessage(bytes);
+            if (opcodeTmp == 1) return new RegisterMessage(bytes);
             else return new LogInMessage(bytes);
         }
         return null;
@@ -105,7 +106,8 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Message> 
             bytes = Arrays.copyOf(bytes, len * 2);
         }
 
-        bytes[len++] = nextByte;
+        bytes[len] = nextByte;
+        len++;
     }
 
     @Override
