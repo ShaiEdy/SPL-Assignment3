@@ -14,26 +14,31 @@ public class PostMessage extends Message {
     private List<String> userToPost; //userList that have been tagged in the post
 
     public PostMessage(byte[] bytes) {
-        super((short)5);
-        int index = 2;
-        while (bytes[index] != '\0') {
-            if (Byte.toString(bytes[index]).equals("@")) { //we deal with @userName
-                index++; // we skip the "@" itself.
+        super((short) 5);
+        content = getContent(bytes);
+
+        for (int i = 0; i < content.length(); i++) {
+            if (content.charAt(i) == '@') {
+                i++;
                 String userName = "";
-                while (bytes[index] != '\0' && !Byte.toString(bytes[index]).equals(" ")) {  //the name is not finished
-                    userName += Byte.toString((bytes[index]));  // we append the userName with the next byte.
-                    index++;
+                while (i != content.length() && content.charAt(i) != ' ') {  //the name is not finished
+                    userName += content.charAt(i);  // we append the userName with the next byte.
+                    i++;
                 }
-                userToPost.add(userName); //add the name to the userList to post
-                content += userName; // we append the content with the userName
-                if (bytes[index] != '\0')
-                    content += " "; // add " " after the userName in the content (I assume that the userName ends with space or nothing.)
-                index++;
-            } else {
-                content += Byte.toString(bytes[index]); // we append the content with the next byte.
-                index++;
+                userToPost.add(userName);  //add the name to the userList to post
             }
         }
+    }
+
+    private String getContent(byte[] messageBytesArray){
+        String toReturn ="";
+        byte[] wordInByte= new byte[messageBytesArray.length-3];
+        int index = 2;
+        for (int i = 0; i <wordInByte.length; i++) {
+            wordInByte[i] = messageBytesArray[index];
+            index++;
+        }
+        return toReturn;
     }
 
     @Override
