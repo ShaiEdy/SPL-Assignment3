@@ -91,4 +91,16 @@ public class BidiMessagingProtocolImpl implements BidiMessagingProtocol<Message>
         result += (short) (byteArr[1] & 0xff);
         return result;
     }
+
+    public DataBase getDataBase() {
+        return dataBase;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
 }

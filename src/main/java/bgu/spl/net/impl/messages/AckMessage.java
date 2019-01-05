@@ -2,6 +2,7 @@ package bgu.spl.net.impl.messages;
 
 import bgu.spl.net.api.Customer;
 import bgu.spl.net.api.DataBase;
+import bgu.spl.net.api.bidi.BidiMessagingProtocolImpl;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -38,8 +39,9 @@ public class AckMessage extends Message {
         return optionalBytesArray;
     }
 
+
     @Override
-    public Message act(DataBase dataBase, Customer customer) {
+    public Message act(BidiMessagingProtocolImpl protocol) {
         return null;
     }
 }

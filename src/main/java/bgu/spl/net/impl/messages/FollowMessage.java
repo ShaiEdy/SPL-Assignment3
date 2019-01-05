@@ -2,6 +2,7 @@ package bgu.spl.net.impl.messages;
 
 import bgu.spl.net.api.Customer;
 import bgu.spl.net.api.DataBase;
+import bgu.spl.net.api.bidi.BidiMessagingProtocolImpl;
 
 import java.util.List;
 import java.util.Vector;
@@ -42,8 +43,10 @@ public class FollowMessage extends Message {
     }
 
     @Override
-    public Message act(DataBase dataBase, Customer thisCustomer) {
+    public Message act(BidiMessagingProtocolImpl protocol) {
         List<String> successList = new Vector<>();
+        Customer thisCustomer = protocol.getCustomer();
+        DataBase dataBase = protocol.getDataBase();
         short successNum = 0;
         if (thisCustomer.isLoggedIn()) {
             for (String userName : userNameList) { // follow/ unFollow each customer in the list

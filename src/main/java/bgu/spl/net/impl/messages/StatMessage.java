@@ -2,6 +2,7 @@ package bgu.spl.net.impl.messages;
 
 import bgu.spl.net.api.Customer;
 import bgu.spl.net.api.DataBase;
+import bgu.spl.net.api.bidi.BidiMessagingProtocolImpl;
 
 
 public class StatMessage extends Message {
@@ -27,7 +28,9 @@ public class StatMessage extends Message {
     }
 
     @Override
-    public Message act(DataBase dataBase, Customer customer) {
+    public Message act(BidiMessagingProtocolImpl protocol) {
+        DataBase dataBase = protocol.getDataBase();
+        Customer customer = protocol.getCustomer();
         if (!customer.isLoggedIn() || dataBase.getUserNameToCustomer().get(userName) == null)
             return new ErrorMessage((short) 6); //if the sender is not logged in or the receiver is unRegistered we send error
         else {

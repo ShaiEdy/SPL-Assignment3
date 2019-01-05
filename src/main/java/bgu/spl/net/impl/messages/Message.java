@@ -1,20 +1,18 @@
 package bgu.spl.net.impl.messages;
 
-import bgu.spl.net.api.Customer;
-import bgu.spl.net.api.DataBase;
+import bgu.spl.net.api.bidi.BidiMessagingProtocolImpl;
 
 import static bgu.spl.net.api.bidi.MessageEncoderDecoderImp.getBytes;
 
-public abstract class Message implements MessageInterface{ //todo: check if we need to implement something? closeable?
+public abstract class Message { //todo: check if we need to implement something? closeable?
     short opcode;
 
     public Message(short opcode) {
         this.opcode= opcode;
     }
 
-    public abstract Message act(DataBase dataBase, Customer customer);
+    public abstract Message act(BidiMessagingProtocolImpl protocol);
 
-    @Override
     public short getOpcode() {
         return opcode;
     }

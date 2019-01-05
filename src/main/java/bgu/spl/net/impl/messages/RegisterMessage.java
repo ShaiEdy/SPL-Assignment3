@@ -2,6 +2,7 @@ package bgu.spl.net.impl.messages;
 
 import bgu.spl.net.api.Customer;
 import bgu.spl.net.api.DataBase;
+import bgu.spl.net.api.bidi.BidiMessagingProtocolImpl;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -46,7 +47,9 @@ public class RegisterMessage extends Message {
     }
 
     @Override
-    public Message act(DataBase dataBase, Customer customer) {
+    public Message act(BidiMessagingProtocolImpl protocol) {
+        DataBase dataBase = protocol.getDataBase();
+        Customer customer = protocol.getCustomer();
         //first we will check that this customer is not already registered.
         if (dataBase.getUserNameToCustomer().containsKey(userName) || customer.isLoggedIn() || customer.isRegistered()) //if customer was already registered.
             return new ErrorMessage((short) 1); //todo: think if we handle correctly situation of two customers registering after each other.

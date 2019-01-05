@@ -2,6 +2,7 @@ package bgu.spl.net.impl.messages;
 
 import bgu.spl.net.api.Customer;
 import bgu.spl.net.api.DataBase;
+import bgu.spl.net.api.bidi.BidiMessagingProtocolImpl;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -47,12 +48,15 @@ public class LogInMessage extends Message {
     }
 
     @Override
-    public Message act(DataBase dataBase, Customer customer) {
+    public Message act(BidiMessagingProtocolImpl protocol) {
+        DataBase dataBase = protocol.getDataBase();
+        Customer customer = protocol.getCustomer();
         if (dataBase.getUserNameToCustomer().containsKey(userName)) { //if customer is registered.
             if (!customer.isLoggedIn()) { // if the protocol customer is not logged in already
                 int connectionID = customer.getConnectionID(); // we want to keep the old connectionID and to not lose it.
                 Customer customerToLogIn = dataBase.getUserNameToCustomer().get(userName); // we get the customer that we should log in. notice that customer in the signature is not necesserily the actual customer and might be empty
                 if (!customerToLogIn.isLoggedIn() && customerToLogIn.getPassword().equals(password)) { // if other client didn't already logged in to it and the password is fine.
+                    protocol.setCustomer(customerToLogIn);
                     customer = customerToLogIn; // we want the protocol's customer to be the actual one that is going to be logged in.
                     customer.setConnectionID(connectionID); //we want the connectionID to be the one that we received from the accept.
                     customer.setLoggedIn(true);

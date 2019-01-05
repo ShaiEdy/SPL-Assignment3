@@ -2,6 +2,7 @@ package bgu.spl.net.impl.messages;
 
 import bgu.spl.net.api.Customer;
 import bgu.spl.net.api.DataBase;
+import bgu.spl.net.api.bidi.BidiMessagingProtocolImpl;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,7 +18,9 @@ public class UserListMessage extends Message {
     } //nothing special to build
 
     @Override
-    public Message act(DataBase dataBase, Customer customer) {
+    public Message act(BidiMessagingProtocolImpl protocol) {
+        DataBase dataBase = protocol.getDataBase();
+        Customer customer = protocol.getCustomer();
         if (!customer.isLoggedIn()) {
             return new ErrorMessage((short) 7);
         }

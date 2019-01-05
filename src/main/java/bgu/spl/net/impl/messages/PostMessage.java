@@ -2,6 +2,7 @@ package bgu.spl.net.impl.messages;
 
 import bgu.spl.net.api.Customer;
 import bgu.spl.net.api.DataBase;
+import bgu.spl.net.api.bidi.BidiMessagingProtocolImpl;
 import javafx.util.Pair;
 
 import java.util.List;
@@ -49,7 +50,9 @@ public class PostMessage extends Message {
     }
 
     @Override
-    public Message act(DataBase dataBase, Customer customer) {
+    public Message act(BidiMessagingProtocolImpl protocol) {
+        DataBase dataBase = protocol.getDataBase();
+        Customer customer = protocol.getCustomer();
         if (customer.isLoggedIn()) { // if customer is logged in
             customer.addPost(content); // first we save the content of the new post to the dataBase
             NotificationMessage notificationMessage = new NotificationMessage((byte)1, customer.getUserName(), content);
