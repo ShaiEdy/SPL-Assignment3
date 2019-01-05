@@ -13,7 +13,9 @@ public class BidiMessagingProtocolImpl implements BidiMessagingProtocol<Message>
     private Connections connections;
     private boolean shouldTerminate;
     private DataBase dataBase;
-    private Customer customer; //this object will never be initialized in the protocol. only in RegisterMessage.
+    //private Customer customer; //this object will never be initialized in the protocol. only in RegisterMessage.
+    private boolean isLoggedIn = false;
+    private String userName = "";
 
 
     public BidiMessagingProtocolImpl(DataBase dataBase) {
@@ -28,7 +30,7 @@ public class BidiMessagingProtocolImpl implements BidiMessagingProtocol<Message>
     public void start(int connectionId, Connections connections) {
         this.connectionId = connectionId;
         this.connections = connections;
-        this.customer.setConnectionID(connectionId);
+        //this.customer.setConnectionID(connectionId);
     }
 
     @Override
@@ -40,7 +42,7 @@ public class BidiMessagingProtocolImpl implements BidiMessagingProtocol<Message>
         connections.send(connectionId,newMessage); // send ack/ error to the client
 
         //--------dealing with notification has to be send to list of customers------//
-        Pair<NotificationMessage, Vector<Customer> > notificationAndUsersVector= dataBase.getUserNameToNotificationSendList().get(customer.getUserName());
+        Pair<NotificationMessage, Vector<Customer> > notificationAndUsersVector= dataBase.getUserNameToNotificationSendList().get(userName);
         if (notificationAndUsersVector!=null){ // the pair is exist (I caused notification)
             Vector<Customer> usersVector = notificationAndUsersVector.getValue(); // second
             NotificationMessage notificationMessage= notificationAndUsersVector.getKey(); // first
@@ -53,15 +55,15 @@ public class BidiMessagingProtocolImpl implements BidiMessagingProtocol<Message>
                     //for un-logeIn customer, we add this notification to the list of notification to be send in the future
                 }
               }
-            dataBase.getUserNameToNotificationSendList().remove(customer.getUserName()); //delete from the hash map the customer that sent notification and we already deal with, remove the key and the value (pair)
+            dataBase.getUserNameToNotificationSendList().remove(userName); //delete from the hash map the customer that sent notification and we already deal with, remove the key and the value (pair)
         }
         //----dealing with notification "wait" to be send to a client that log in---//
         if (message instanceof LogInMessage) {
-            Vector<NotificationMessage> notificationMessageVector = dataBase.getNotificationsToBeSendInLogin().get(customer.getUserName());
+            Vector<NotificationMessage> notificationMessageVector = dataBase.getNotificationsToBeSendInLogin().get(userName);
             if (notificationMessageVector != null && !notificationMessageVector.isEmpty()) {
                 //mean this client has notification "waiting" to be send to him
                 for (NotificationMessage notificationMessage : notificationMessageVector) {
-                    connections.send(customer.getConnectionID(), notificationMessage);
+                    connections.send(connectionId, notificationMessage);
                     //send the customer all the needed notification that waited
                 }
                 notificationMessageVector.clear();
@@ -96,11 +98,27 @@ public class BidiMessagingProtocolImpl implements BidiMessagingProtocol<Message>
         return dataBase;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public boolean isLoggedIn() {
+        return isLoggedIn;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setLoggedIn(boolean loggedIn) {
+        isLoggedIn = loggedIn;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public int getConnectionId() {
+        return connectionId;
+    }
+
+    public void setConnectionId(int connectionId) {
+        this.connectionId = connectionId;
     }
 }

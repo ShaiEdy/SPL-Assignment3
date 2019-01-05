@@ -51,19 +51,22 @@ public class PMMessage extends Message {
     @Override
     public Message act(BidiMessagingProtocolImpl protocol) {
         DataBase dataBase = protocol.getDataBase();
-        Customer customer = protocol.getCustomer();
-        if (!customer.isLoggedIn()|| dataBase.getUserNameToCustomer().get(userNameToSendPM)==null)
+        //Customer customer = protocol.getCustomer();
+
+        if (!protocol.isLoggedIn()|| dataBase.getUserNameToCustomer().get(userNameToSendPM)==null)
             return new ErrorMessage((short) 6); //if the sender is not logged in or the receiver is unRegistered we send error
         else {
-            String senderUserName = customer.getUserName();
+            String thisCustomerUserName = protocol.getUserName();
+            Customer thisCustomer = dataBase.getUserNameToCustomer().get(thisCustomerUserName);
+
             dataBase.getUserNameToCustomer().get(userNameToSendPM).addPM(content); //add to the receiver
-            customer.addPM(content); // add to the sender //todo think if content or this
-            NotificationMessage notificationMessage = new NotificationMessage((byte) 0, senderUserName, content);
+            thisCustomer.addPM(content); // add to the sender //todo think if content or this
+            NotificationMessage notificationMessage = new NotificationMessage((byte) 0, thisCustomerUserName, content);
             Vector<Customer> vectorOfReceivers = new Vector<>();
             Customer receivedCustomer = dataBase.getUserNameToCustomer().get(userNameToSendPM);
             vectorOfReceivers.add(receivedCustomer);
             Pair<NotificationMessage, Vector<Customer>> pair = new Pair<>(notificationMessage, vectorOfReceivers);
-            dataBase.getUserNameToNotificationSendList().put(senderUserName, pair);
+            dataBase.getUserNameToNotificationSendList().put(thisCustomerUserName, pair);
             /// all this for creating notification that will be send by process of protocol
             return new AckMessage((short) 6, null);
         // todo change to byte

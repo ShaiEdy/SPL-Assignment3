@@ -15,9 +15,18 @@ public class LogOutMessage extends Message {
 
     @Override
     public Message act(BidiMessagingProtocolImpl protocol) {
-        Customer customer = protocol.getCustomer();
-        if (!customer.isLoggedIn()) //if customer is not registered or not logged in
-            return new ErrorMessage((short) 3);
-        else return new AckMessage((short) 3, null); //customer is registered and logged in.
+        //Customer customer = protocol.getCustomer();
+        DataBase dataBase = protocol.getDataBase();
+
+        if (protocol.isLoggedIn()) {//if customer is not registered or not logged in
+            String thisCustomerUserName = protocol.getUserName();
+            Customer thisCustomer = dataBase.getUserNameToCustomer().get(thisCustomerUserName);
+            if (thisCustomer.isLoggedIn()) {
+                thisCustomer.setLoggedIn(false);
+                return new AckMessage((short) 3, null); //customer is registered and logged in.
+            }
+        }
+        return new ErrorMessage((short) 3);
+
     }
 }

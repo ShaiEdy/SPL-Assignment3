@@ -45,13 +45,15 @@ public class FollowMessage extends Message {
     @Override
     public Message act(BidiMessagingProtocolImpl protocol) {
         List<String> successList = new Vector<>();
-        Customer thisCustomer = protocol.getCustomer();
+        //Customer thisCustomer = protocol.getCustomer();
         DataBase dataBase = protocol.getDataBase();
         short successNum = 0;
-        if (thisCustomer.isLoggedIn()) {
+        if (protocol.isLoggedIn()) {
+            String thisCustomerUserName = protocol.getUserName();
+            Customer thisCustomer = dataBase.getUserNameToCustomer().get(thisCustomerUserName);
             for (String userName : userNameList) { // follow/ unFollow each customer in the list
                 Customer otherCustomer = dataBase.getUserNameToCustomer().get(userName); // customer from the list to un/follow
-                if (otherCustomer != null) { //the user with this name is register
+                if (otherCustomer != null) { //the user with this name is registered
                     if (follow) {
                         if (!thisCustomer.getFollowedByMe().contains(otherCustomer)) { //if I'm not already following otherCustomer.
                             thisCustomer.addFollowing(otherCustomer);

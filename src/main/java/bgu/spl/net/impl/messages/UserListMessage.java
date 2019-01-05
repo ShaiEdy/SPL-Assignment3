@@ -20,8 +20,8 @@ public class UserListMessage extends Message {
     @Override
     public Message act(BidiMessagingProtocolImpl protocol) {
         DataBase dataBase = protocol.getDataBase();
-        Customer customer = protocol.getCustomer();
-        if (!customer.isLoggedIn()) {
+        //Customer customer = protocol.getCustomer();
+        if (!protocol.isLoggedIn()) {
             return new ErrorMessage((short) 7);
         }
         //byte[] ackMessageOptionalArr = new byte[0];
