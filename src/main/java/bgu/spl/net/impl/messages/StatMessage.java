@@ -12,10 +12,18 @@ public class StatMessage extends Message {
         super((short)8);
 
         int index= 2;
-        while (messageBytesArray[index]!='\0'){  //complete the user name string
-            userName+=Byte.toString(messageBytesArray[index]);
+        int counterNameBytes=0;
+        int primeIndex=index;
+        while (messageBytesArray[index]!='\0'){  //counting the user name bytes
+            counterNameBytes++;
             index++;
         }
+        byte [] userNameBytes =new  byte [counterNameBytes];
+        for (int i = 0; i <counterNameBytes ; i++) { // creating bytes array of the user name
+            userNameBytes[i]= messageBytesArray[primeIndex];
+            primeIndex++;
+        }
+        userName= new String(userNameBytes);
     }
 
     @Override
