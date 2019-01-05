@@ -43,7 +43,7 @@ public abstract class BaseServer<T> implements Server<T> {
             while (!Thread.currentThread().isInterrupted()) {
                 Socket clientSock = serverSock.accept(); //wait till a client connect with the server
                 System.out.println("Connection Established");
-                BlockingConnectionHandler<T> handler = new BlockingConnectionHandler<T>( //kind of creating customer.
+                BlockingConnectionHandler<T> handler = new BlockingConnectionHandler<>( //kind of creating customer.
                         clientSock,
                         encdecFactory.get(),
                         bidiProtocolFactory.get(),

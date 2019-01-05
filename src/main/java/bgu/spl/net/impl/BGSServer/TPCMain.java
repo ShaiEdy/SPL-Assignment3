@@ -8,7 +8,7 @@ import bgu.spl.net.api.bidi.MessageEncoderDecoderImp;
 import bgu.spl.net.impl.messages.Message;
 import bgu.spl.net.srv.Server;
 
-public class TCPMain {
+public class TPCMain {
     public static void main(String[] args) {
         DataBase dataBase = new DataBase();
         Server baseServer = Server.threadPerClient(7000,
