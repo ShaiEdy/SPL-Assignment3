@@ -36,7 +36,7 @@ public class BidiMessagingProtocolImpl implements BidiMessagingProtocol<Message>
         // get a specific message that was created in encoder decoder
         //we use here the act messages of the messages for doing the specific process that needed
         //we will send back a response using connections.
-        Message newMessage= message.act(dataBase,customer);
+        Message newMessage= message.act(this);
         connections.send(connectionId,newMessage); // send ack/ error to the client
 
         //--------dealing with notification has to be send to list of customers------//
