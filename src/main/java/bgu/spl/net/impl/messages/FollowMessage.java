@@ -22,13 +22,22 @@ public class FollowMessage extends Message {
         numOfUsers = bytesToShort(twoBytes);
         int index = 5;
         while (index < messageBytesArray.length) {
+         //   byte[] nameBytes;
             String userName = "";
-            while (messageBytesArray[index] != '\0') {
-                userName += Byte.toString(messageBytesArray[index]); // we append the userName with the next byte.
+            int counterForNameBytes=0;
+            int primeIndex= index;
+            while (messageBytesArray[index] != '\0') { //counting num of bytes for the userName
+                counterForNameBytes++;
                 index++;
             }
+            byte [] nameBytes= new byte [counterForNameBytes];
+            for (int i = 0; i < counterForNameBytes ; i++) {
+                nameBytes[i]= messageBytesArray[primeIndex];
+                primeIndex++;
+            }
+            userName= new String(nameBytes);
             userNameList.add(userName); //when word finished (\0) - we add the userName to the list
-            index++;
+            index++;// pass /0 byte
         }
     }
 

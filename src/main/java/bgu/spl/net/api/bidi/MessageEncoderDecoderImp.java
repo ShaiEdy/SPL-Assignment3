@@ -161,7 +161,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Message> 
         Byte[] Bytes = new Byte[bytes.length];
         int index=0;
         for(byte b: bytes) {
-            Bytes[index++] = b;
+            Bytes[index] = b;
             index++;
         }
         return Arrays.asList(Bytes);
