@@ -73,7 +73,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Message> 
             numOfUsersArr[1] = bytes[4];
             numOfUserCounter = bytesToShort(numOfUsersArr);
         }
-        if (bytes[len-1] == '\0') {
+        if (len>=5 && bytes[len-1] == '\0') {
             countNumOfZeros++;
             if (countNumOfZeros == numOfUserCounter + 1) {
                 makeVariablesZero();

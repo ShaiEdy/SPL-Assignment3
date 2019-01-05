@@ -21,7 +21,7 @@ public class FollowMessage extends Message {
         byte[] twoBytes = {messageBytesArray[3], messageBytesArray[4]};
         numOfUsers = bytesToShort(twoBytes);
         int index = 5;
-        while (index < messageBytesArray.length) {
+        while (index < messageBytesArray.length&& userNameList.size()<numOfUsers) {
          //   byte[] nameBytes;
             String userName = "";
             int counterForNameBytes=0;
