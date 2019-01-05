@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class PostMessage extends Message {
     private short opcode= 5;
     private String content;
-    private List<String> userToPost; //userList that have been tagged in the post
+    private List<String> userToPost = new Vector<>(); //userList that have been tagged in the post
 
     public PostMessage(byte[] bytes) {
         super((short) 5);
@@ -31,13 +31,20 @@ public class PostMessage extends Message {
     }
 
     private String getContent(byte[] messageBytesArray){
-        String toReturn ="";
-        byte[] wordInByte= new byte[messageBytesArray.length-3];
+        String toReturn;
         int index = 2;
+        int contentArraySize = 0;
+        while (messageBytesArray[index] != '\0'){
+            contentArraySize++;
+            index++;
+        }
+        byte[] wordInByte= new byte[contentArraySize];
+        index = 2;
         for (int i = 0; i <wordInByte.length; i++) {
             wordInByte[i] = messageBytesArray[index];
             index++;
         }
+        toReturn = new String(wordInByte);
         return toReturn;
     }
 

@@ -29,7 +29,7 @@ public class PMMessage extends Message {
             userNameBytes[i]= bytes[indexOfFirstLetter];
             indexOfFirstLetter++;
         }
-        userNameToSendPM= userNameBytes.toString();
+        userNameToSendPM= new String(userNameBytes);
 
         index++; //pass the \0 byte
         indexOfFirstLetter++;
@@ -43,7 +43,7 @@ public class PMMessage extends Message {
             indexOfFirstLetter++;
         }
 
-        content= contentBytes.toString();
+        content= new String(contentBytes);
 
     }
 
