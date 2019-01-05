@@ -130,7 +130,7 @@ public class Customer {
     }
 
     public int getNumOfFollowing(){
-        return followingMe.size();
+        return followedByMe.size();
     }
 
     public void addPM(String content) {

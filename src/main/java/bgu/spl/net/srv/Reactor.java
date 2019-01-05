@@ -65,9 +65,7 @@ public class Reactor<T> implements Server<T> {
                         handleReadWrite(key);
                     }
                 }
-
                 selector.selectedKeys().clear(); //clear the selected keys set so that we can know about new events
-
             }
 
         } catch (ClosedSelectorException ex) {
@@ -81,7 +79,8 @@ public class Reactor<T> implements Server<T> {
         pool.shutdown();
     }
 
-    /*package*/ void updateInterestedOps(SocketChannel chan, int ops) {
+    /*package*/
+    void updateInterestedOps(SocketChannel chan, int ops) {
         final SelectionKey key = chan.keyFor(selector);
         if (Thread.currentThread() == selectorThread) {
             key.interestOps(ops);
@@ -97,14 +96,13 @@ public class Reactor<T> implements Server<T> {
     private void handleAccept(ServerSocketChannel serverChan, Selector selector) throws IOException {
         SocketChannel clientChan = serverChan.accept();
         clientChan.configureBlocking(false);
-        /*final NonBlockingConnectionHandler<T> handler = new NonBlockingConnectionHandler<>(
+        final NonBlockingConnectionHandler<T> handler = new NonBlockingConnectionHandler<>(
                 readerFactory.get(),
                 protocolFactory.get(),
                 clientChan,
                 this);
 
         clientChan.register(selector, SelectionKey.OP_READ, handler);
-        */
     }
 
     private void handleReadWrite(SelectionKey key) {

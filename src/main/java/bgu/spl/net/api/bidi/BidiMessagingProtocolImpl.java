@@ -51,6 +51,9 @@ public class BidiMessagingProtocolImpl implements BidiMessagingProtocol<Message>
                     connections.send(otherUser.getConnectionID(), notificationMessage); //send notification that needed to be send
                 }
                 else{
+                    if (dataBase.getNotificationsToBeSendInLogin().get(otherUser.getUserName())==null){
+                        dataBase.getNotificationsToBeSendInLogin().put(otherUser.getUserName(), new Vector<NotificationMessage>());
+                    }
                     dataBase.getNotificationsToBeSendInLogin().get(otherUser.getUserName()).add(notificationMessage);
                     //for un-logeIn customer, we add this notification to the list of notification to be send in the future
                 }
