@@ -19,7 +19,7 @@ public class BidiMessagingProtocolImpl implements BidiMessagingProtocol<Message>
     public BidiMessagingProtocolImpl(DataBase dataBase) {
         this.dataBase = dataBase;
         this.shouldTerminate = false;
-        this.customer = new Customer();
+        //this.customer = new Customer();
     }
     /**
      * Used to initiate the current client protocol with it's personal connection ID and the connections implementation
