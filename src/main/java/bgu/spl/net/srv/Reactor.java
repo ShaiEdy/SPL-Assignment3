@@ -105,12 +105,17 @@ public class Reactor<T> implements Server<T> {
                 readerFactory.get(),
                 protocolFactory.get(),
                 clientChan,
-                this);
+                this,
+                connectionID,
+                connections);
 
-        clientChan.register(selector, SelectionKey.OP_READ, handler);
-
+        System.out.println("Connected");
         connections.addNewConnection(connectionID, handler);
         connectionID++;
+        Runnable start= handler.start(); // this is runnable method that add task to the thread pool to execute in the future
+        pool.submit(handler, start); //runnable that belongs to this  handler
+        clientChan.register(selector, SelectionKey.OP_READ, handler);
+
     }
 
     private void handleReadWrite(SelectionKey key) {
