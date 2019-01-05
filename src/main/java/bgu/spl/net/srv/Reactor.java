@@ -114,7 +114,7 @@ public class Reactor<T> implements Server<T> {
         connectionID++;
         Runnable start= handler.start(); // this is runnable method that add task to the thread pool to execute in the future
         pool.submit(handler, start); //runnable that belongs to this  handler
-        clientChan.register(selector, SelectionKey.OP_READ, handler);
+        clientChan.register(selector, SelectionKey.OP_READ, handler); //
 
     }
 
