@@ -55,7 +55,7 @@ public class RegisterMessage extends Message {
             if (dataBase.getUserNameToCustomer().containsKey(userName) || protocol.isLoggedIn() /*|| customer.isRegistered()*/) //if customer was already registered.
                 return new ErrorMessage((short) 1); //todo: think if we handle correctly situation of two customers registering after each other.
 
-            else { // if username is not already registered
+            else { // if username is not already registered/
                 Customer customer = new Customer();
                 customer.setUserName(userName);
                 customer.setPassword(password);
