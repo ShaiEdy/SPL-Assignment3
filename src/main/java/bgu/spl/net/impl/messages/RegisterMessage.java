@@ -10,12 +10,12 @@ public class RegisterMessage extends Message {
 
 
     public RegisterMessage(byte[] messageBytesArray) {
-        super((short)1);
+        super((short) 1);
 
         int index = 2; // represents the index we are currently looking at. starts from 2 because we dont care about the Opcode.
 
         userName = appendToString(messageBytesArray, index);
-        index= index +userName.length()+1;
+        index = index + userName.length() + 1;
         password = appendToString(messageBytesArray, index);
     }
 
@@ -24,17 +24,17 @@ public class RegisterMessage extends Message {
      **/
     private String appendToString(byte[] messageBytesArray, int index) {
         byte[] wordInByte;
-        int counter=0;
-        int primaryIndex= index;
+        int counter = 0;
+        int primaryIndex = index;
         while (messageBytesArray[index] != '\0') {
             counter++;
             index++;
         }
-        wordInByte= new byte[counter];
-        index= primaryIndex;
+        wordInByte = new byte[counter];
+        index = primaryIndex;
 
         for (int i = 0; i < counter; i++) {
-            wordInByte[i]= messageBytesArray[index];
+            wordInByte[i] = messageBytesArray[index];
             index++;
         }
         return new String(wordInByte);
@@ -42,8 +42,8 @@ public class RegisterMessage extends Message {
 
     @Override
     public Message act(BidiMessagingProtocolImpl protocol) {
-            DataBase dataBase = protocol.getDataBase();
-            synchronized (dataBase.getUserNameToCustomer()) { /// sync to prevent tow users that register with same name in the same time
+        DataBase dataBase = protocol.getDataBase();
+        synchronized (dataBase.getUserNameToCustomer()) { /// sync to prevent tow users that register with same name in the same time
             if (dataBase.getUserNameToCustomer().containsKey(userName) || protocol.isLoggedIn() /*|| customer.isRegistered()*/) //if customer was already registered.
                 return new ErrorMessage((short) 1); //todo: think if we handle correctly situation of two customers registering after each other.
 
