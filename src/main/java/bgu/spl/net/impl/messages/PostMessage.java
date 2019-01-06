@@ -58,10 +58,11 @@ public class PostMessage extends Message {
             Vector<Customer> customersToSendNotificationToVector = new Vector<>(followingMe);
             for (String userNameToSendNotificationTo : userToPost) { // we iterate //
                 Customer customerToSendNotificationTo = dataBase.getUserNameToCustomer().get(userNameToSendNotificationTo);
-                if (!customersToSendNotificationToVector.contains(customerToSendNotificationTo)) // we want to add him to the vector only if he is not already there. because we dont want someone to get two notifications.
+                if (customerToSendNotificationTo != null && !customersToSendNotificationToVector.contains(customerToSendNotificationTo)) // we want to add him to the vector only if he is not already there. because we dont want someone to get two notifications.
                     customersToSendNotificationToVector.add(customerToSendNotificationTo);
             }
-            for (Customer customerToSendNotification : customersToSendNotificationToVector) {
+            for (Customer customerToSendNotification : customersToSendNotificationToVector)
+            {
                 synchronized (customerToSendNotification) {
                     if (customerToSendNotification.isLoggedIn())
                         protocol.getConnections().send(customerToSendNotification.getConnectionID(), notificationMessage);

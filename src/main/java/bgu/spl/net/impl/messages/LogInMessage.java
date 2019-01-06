@@ -66,8 +66,8 @@ public class LogInMessage extends Message {
                             }
                             notificationMessageVector.clear();
                         }
+                        return new AckMessage((short) 2, null);
                     }
-                    return new AckMessage((short) 2, null);
                 }
             }
         }

@@ -31,7 +31,7 @@ public class StatMessage extends Message {
         DataBase dataBase = protocol.getDataBase();
 
         if (!protocol.isLoggedIn() || dataBase.getUserNameToCustomer().get(userName) == null)
-            return new ErrorMessage((short) 6); //if the sender is not logged in or the receiver is unRegistered we send error
+            return new ErrorMessage((short) 8); //if the sender is not logged in or the receiver is unRegistered we send error
         else {
             Customer otherCustomer = dataBase.getUserNameToCustomer().get(userName);
             short postNum = (short) otherCustomer.getNumOfPost();
