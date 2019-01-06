@@ -28,14 +28,7 @@ public class ReactorMain {
                 });
         reactor.serve();
 
-        /*
-        Server.reactor(
-                3,
-                7000, //port
-                () -> BidiMessagingProtocol<Message>BidiMessagingProtocol(), //protocol factory
-                ObjectEncoderDecoder::new //message encoder decoder factory
-        ).serve();
-        */
+
     }
 
 }
