@@ -43,6 +43,7 @@ public class LogInMessage extends Message {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Message act(BidiMessagingProtocolImpl protocol) {
         DataBase dataBase = protocol.getDataBase();
         if (dataBase.getUserNameToCustomer().containsKey(userName)) { //if customer is registered.
