@@ -51,7 +51,7 @@ public class RegisterMessage extends Message {
             DataBase dataBase = protocol.getDataBase();
             //Customer customer = protocol.getCustomer();
             //first we will check that this customer is not already registered.
-            synchronized (dataBase.getUserNameToCustomer()) { // sync to prevent tow users that register with same name in the same time
+            synchronized (dataBase.getUserNameToCustomer()) { /// sync to prevent tow users that register with same name in the same time
             if (dataBase.getUserNameToCustomer().containsKey(userName) || protocol.isLoggedIn() /*|| customer.isRegistered()*/) //if customer was already registered.
                 return new ErrorMessage((short) 1); //todo: think if we handle correctly situation of two customers registering after each other.
 

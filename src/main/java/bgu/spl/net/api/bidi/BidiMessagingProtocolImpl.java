@@ -49,7 +49,7 @@ public class BidiMessagingProtocolImpl implements BidiMessagingProtocol<Message>
             for (Customer otherUser: usersVector){
                 if (otherUser.isLoggedIn()) {
                     connections.send(otherUser.getConnectionID(), notificationMessage); //send notification that needed to be send
-                }
+                } k
                 else{
                     if (dataBase.getNotificationsToBeSendInLogin().get(otherUser.getUserName())==null){
                         dataBase.getNotificationsToBeSendInLogin().put(otherUser.getUserName(), new Vector<NotificationMessage>());
