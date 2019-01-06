@@ -17,7 +17,7 @@ public class ReactorMain {
 
         DataBase dataBase = new DataBase();
         Server reactor = Server.reactor(3,
-                7001,
+                7002,
                 () -> {
                     BidiMessagingProtocol<Message> bidiMessagingProtocol = new BidiMessagingProtocolImpl(dataBase);
                     return bidiMessagingProtocol;

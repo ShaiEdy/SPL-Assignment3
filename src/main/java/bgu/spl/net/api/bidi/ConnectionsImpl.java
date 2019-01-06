@@ -1,6 +1,7 @@
 package bgu.spl.net.api.bidi;
 
 import bgu.spl.net.api.Customer;
+import bgu.spl.net.impl.messages.Message;
 import bgu.spl.net.srv.BlockingConnectionHandler;
 import bgu.spl.net.srv.bidi.ConnectionHandler;
 
@@ -8,7 +9,7 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ConnectionsImpl <T> implements Connections<T> {
+public class ConnectionsImpl implements Connections<Message> {
     private ConcurrentHashMap<Integer, ConnectionHandler> idToConnectionHandler; //all the clients that connected to the server
     private ConcurrentHashMap<Integer, Customer> idToCustomer;
 
@@ -24,7 +25,7 @@ public class ConnectionsImpl <T> implements Connections<T> {
 
     @Override
     //send the msg to the CH with the given id
-    public boolean send(int connectionId, T msg) {
+    public boolean send(int connectionId, Message msg) {
         ConnectionHandler CH = idToConnectionHandler.get(connectionId);
         CH.send(msg);
         return false; //todo- think how to know if the send succeed or not
@@ -32,7 +33,7 @@ public class ConnectionsImpl <T> implements Connections<T> {
 
     @Override
     //send the broadcast to whoever registered
-    public void broadcast(T msg) {
+    public void broadcast(Message msg) {
         Set<Integer> idSet = idToConnectionHandler.keySet();
         for (Integer integer : idSet) {
             ConnectionHandler CH = idToConnectionHandler.get(integer);

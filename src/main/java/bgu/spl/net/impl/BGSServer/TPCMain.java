@@ -11,7 +11,7 @@ import bgu.spl.net.srv.Server;
 public class TPCMain {
     public static void main(String[] args) {
         DataBase dataBase = new DataBase();
-        Server baseServer = Server.threadPerClient(7000,
+        Server baseServer = Server.threadPerClient(7002,
                 () -> {
                     BidiMessagingProtocol<Message> bidiMessagingProtocol = new BidiMessagingProtocolImpl(dataBase);
                     return bidiMessagingProtocol;

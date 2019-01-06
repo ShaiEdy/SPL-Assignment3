@@ -124,4 +124,8 @@ public class BidiMessagingProtocolImpl implements BidiMessagingProtocol<Message>
     public void setConnectionId(int connectionId) {
         this.connectionId = connectionId;
     }
+
+    public Connections getConnections() {
+        return connections;
+    }
 }

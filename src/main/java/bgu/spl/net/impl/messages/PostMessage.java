@@ -52,22 +52,24 @@ public class PostMessage extends Message {
     @Override
     public Message act(BidiMessagingProtocolImpl protocol) {
         DataBase dataBase = protocol.getDataBase();
-        //Customer customer = protocol.getCustomer();
         if (protocol.isLoggedIn()) { // if customer is logged in
             String thisCustomerUserName = protocol.getUserName();
             Customer thisCustomer = dataBase.getUserNameToCustomer().get(thisCustomerUserName);
-            thisCustomer .addPost(content); // first we save the content of the new post to the dataBase
-            NotificationMessage notificationMessage = new NotificationMessage((byte)1, thisCustomerUserName, content);
+            thisCustomer.addPost(content); // first we save the content of the new post to the dataBase
+            NotificationMessage notificationMessage = new NotificationMessage((byte) 1, thisCustomerUserName, content);
             List<Customer> followingMe = thisCustomer.getFollowingMe(); // we get the "who is following me" Vector
-            // we iterate //todo: Check if there might be a problem when iterating over the vector when some one else is try to follow me at the same time.
             Vector<Customer> customersToSendNotificationToVector = new Vector<>(followingMe);
             for (String userNameToSendNotificationTo : userToPost) { // we iterate //todo: Check if there might be a problem when iterating over the vector when some one else is try to follow me at the same time.
                 Customer customerToSendNotificationTo = dataBase.getUserNameToCustomer().get(userNameToSendNotificationTo);
                 if (!customersToSendNotificationToVector.contains(customerToSendNotificationTo)) // we want to add him to the vector only if he is not already there. because we dont want someone to get two notifications.
                     customersToSendNotificationToVector.add(customerToSendNotificationTo);
             }
-            ConcurrentHashMap<String, Pair<NotificationMessage, Vector<Customer>>> userNameToNotificationSendList = dataBase.getUserNameToNotificationSendList(); // we get the map where we will put the customer that should be notified
-            userNameToNotificationSendList.put(thisCustomer.getUserName(), new Pair<>(notificationMessage, customersToSendNotificationToVector));
+            for (Customer customer : customersToSendNotificationToVector) {
+                //todo syncrhonize on customer????
+                protocol.getConnections().send(customer.getConnectionID(), notificationMessage);
+            }
+            //ConcurrentHashMap<String, Pair<NotificationMessage, Vector<Customer>>> userNameToNotificationSendList = dataBase.getUserNameToNotificationSendList(); // we get the map where we will put the customer that should be notified
+            //userNameToNotificationSendList.put(thisCustomer.getUserName(), new Pair<>(notificationMessage, customersToSendNotificationToVector));
             return new AckMessage((short) 5, null);
         }
         return new ErrorMessage((short) 5);
