@@ -107,7 +107,6 @@ public class Reactor<T> implements Server<T> {
                 connectionID,
                 connections);
 
-        System.out.println("Connected");
         connections.addNewConnection(connectionID, handler);
         connectionID++;//
         Runnable start= handler.start(); // this is runnable method that add task to the thread pool to execute in the future

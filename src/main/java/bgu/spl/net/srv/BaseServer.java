@@ -37,7 +37,6 @@ public abstract class BaseServer<T> implements Server<T> {
             this.sock = serverSock; //just to be able to close (the close is to sock)
             while (!Thread.currentThread().isInterrupted()) {
                 Socket clientSock = serverSock.accept(); //wait till a client connect with the server
-                System.out.println("Connection Established");
                 BlockingConnectionHandler<T> handler = new BlockingConnectionHandler<>( //kind of creating customer.
                         clientSock,
                         encdecFactory.get(),
