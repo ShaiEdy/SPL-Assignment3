@@ -22,7 +22,7 @@ public class BlockingConnectionHandler<T> implements Runnable, ConnectionHandler
     private int connectionID;
 
 
-
+    @SuppressWarnings("unchecked")
     public BlockingConnectionHandler(Socket sock, MessageEncoderDecoder<T> reader, BidiMessagingProtocol<T> protocol,
                                      int connectionId, Connections connections) {
         this.sock = sock;
@@ -48,7 +48,7 @@ public class BlockingConnectionHandler<T> implements Runnable, ConnectionHandler
                 }
             }
             connections.disconnect(connectionID);
-            
+
         } catch (IOException ex) {
             ex.printStackTrace();
         }

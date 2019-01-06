@@ -130,6 +130,7 @@ public class NonBlockingConnectionHandler<T> implements ConnectionHandler<T> {
         reactor.updateInterestedOps(chan, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
     }
 
+    @SuppressWarnings("unchecked")
     public Runnable start(){
         return () -> this.protocol.start(connectionId, connections);
     }
