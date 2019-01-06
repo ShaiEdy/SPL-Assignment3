@@ -2,10 +2,7 @@ package bgu.spl.net.impl.messages;
 
 import bgu.spl.net.api.bidi.BidiMessagingProtocolImpl;
 
-import java.util.concurrent.ConcurrentHashMap;
-
 public class ErrorMessage extends Message {
-    private short opcode=11;
     private short otherMessageOpcode;
 
     public ErrorMessage(short otherMessageOpcode) {

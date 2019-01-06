@@ -3,14 +3,10 @@ package bgu.spl.net.impl.messages;
 import bgu.spl.net.api.Customer;
 import bgu.spl.net.api.DataBase;
 import bgu.spl.net.api.bidi.BidiMessagingProtocolImpl;
-import javafx.util.Pair;
-
 import java.util.List;
 import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class PostMessage extends Message {
-    private short opcode= 5;
     private String content;
     private List<String> userToPost = new Vector<>(); //userList that have been tagged in the post
 
@@ -65,7 +61,6 @@ public class PostMessage extends Message {
                     customersToSendNotificationToVector.add(customerToSendNotificationTo);
             }
             for (Customer customerToSendNotification : customersToSendNotificationToVector) {
-                //todo syncrhonize on customer????
                 synchronized (customerToSendNotification) {
                     if (customerToSendNotification.isLoggedIn())
                         protocol.getConnections().send(customerToSendNotification.getConnectionID(), notificationMessage);
@@ -77,8 +72,6 @@ public class PostMessage extends Message {
                     }
                 }
             }
-            //ConcurrentHashMap<String, Pair<NotificationMessage, Vector<Customer>>> userNameToNotificationSendList = dataBase.getUserNameToNotificationSendList(); // we get the map where we will put the customer that should be notified
-            //userNameToNotificationSendList.put(thisCustomer.getUserName(), new Pair<>(notificationMessage, customersToSendNotificationToVector));
             return new AckMessage((short) 5, null);
         }
         return new ErrorMessage((short) 5);

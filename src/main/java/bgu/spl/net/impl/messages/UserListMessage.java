@@ -1,6 +1,5 @@
 package bgu.spl.net.impl.messages;
 
-import bgu.spl.net.api.Customer;
 import bgu.spl.net.api.DataBase;
 import bgu.spl.net.api.bidi.BidiMessagingProtocolImpl;
 
@@ -20,21 +19,19 @@ public class UserListMessage extends Message {
     @Override
     public Message act(BidiMessagingProtocolImpl protocol) {
         DataBase dataBase = protocol.getDataBase();
-        //Customer customer = protocol.getCustomer();
+
         if (!protocol.isLoggedIn()) {
             return new ErrorMessage((short) 7);
         }
-        //byte[] ackMessageOptionalArr = new byte[0];
+
         Set<String> registerNamesSet = dataBase.getUserNameToCustomer().keySet();
         byte[] numOfRegistersBytesArr = shortToBytes((short) registerNamesSet.size());//num of registersUsers
         List<Byte> bytesToReturn = new Vector<>(convertbytesArrayToBytesList(numOfRegistersBytesArr));
-        //ackMessageOptionalArr = merge2Arrays(ackMessageOptionalArr,numOfRegistersBytesArr);
 
         for (String name : registerNamesSet) {
             bytesToReturn.addAll(convertbytesArrayToBytesList(name.getBytes()));// add the notification type
             bytesToReturn.add((byte) '\0');
         }
-        //byte[] ackMessageOptionalArr = merge2Arrays(numOfRegistersBytesArr, registerListString.getBytes());
 
         byte[] ArrayToReturn = convertListToArray(bytesToReturn); //convert to byte[]
 

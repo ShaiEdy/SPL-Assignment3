@@ -3,17 +3,13 @@ package bgu.spl.net.impl.messages;
 import bgu.spl.net.api.Customer;
 import bgu.spl.net.api.DataBase;
 import bgu.spl.net.api.bidi.BidiMessagingProtocolImpl;
-import javafx.util.Pair;
-
 import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class PMMessage extends Message {
-    private short opcode= 6;
-    byte[] userNameBytes;
-    byte[] contentBytes;
-    String userNameToSendPM;
-    String content;
+    private byte[] userNameBytes;
+    private byte[] contentBytes;
+    private String userNameToSendPM;
+    private String content;
 
     public PMMessage(byte [] bytes) {
         super((short)6);
@@ -51,7 +47,6 @@ public class PMMessage extends Message {
     @Override
     public Message act(BidiMessagingProtocolImpl protocol) {
         DataBase dataBase = protocol.getDataBase();
-        //Customer customer = protocol.getCustomer();
 
         if (!protocol.isLoggedIn()|| dataBase.getUserNameToCustomer().get(userNameToSendPM)==null)
             return new ErrorMessage((short) 6); //if the sender is not logged in or the receiver is unRegistered we send error
@@ -62,9 +57,7 @@ public class PMMessage extends Message {
             dataBase.getUserNameToCustomer().get(userNameToSendPM).addPM(content); //add to the receiver
             thisCustomer.addPM(content); // add to the sender //todo think if content or this
             NotificationMessage notificationMessage = new NotificationMessage((byte) 0, thisCustomerUserName, content);
-            //Vector<Customer> vectorOfReceivers = new Vector<>();
             Customer receivedCustomer = dataBase.getUserNameToCustomer().get(userNameToSendPM);
-            //todo sync::
             synchronized (receivedCustomer) {
                 if (receivedCustomer.isLoggedIn())
                     protocol.getConnections().send(receivedCustomer.getConnectionID(), notificationMessage);
@@ -75,10 +68,6 @@ public class PMMessage extends Message {
                     dataBase.getNotificationsToBeSendInLogin().get(receivedCustomer.getUserName()).add(notificationMessage);
                 }
             }
-            //vectorOfReceivers.add(receivedCustomer);
-            //Pair<NotificationMessage, Vector<Customer>> pair = new Pair<>(notificationMessage, vectorOfReceivers);
-            //dataBase.getUserNameToNotificationSendList().put(thisCustomerUserName, pair);
-            /// all this for creating notification that will be send by process of protocol
             return new AckMessage((short) 6, null);
         // todo change to byte
         }

@@ -6,10 +6,8 @@ import bgu.spl.net.api.bidi.BidiMessagingProtocolImpl;
 
 import java.util.List;
 import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class FollowMessage extends Message {
-    private short opcode= 4;
     private Boolean follow; //(true=follow, false= unFollow)
     private short numOfUsers;
     private List<String> userNameList;

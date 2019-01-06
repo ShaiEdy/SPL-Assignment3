@@ -1,6 +1,5 @@
 package bgu.spl.net.api;
 
-import java.io.FileOutputStream;
 import java.util.List;
 import java.util.Vector;
 
@@ -10,7 +9,6 @@ public class Customer {
     private String userName;
     private String password;
     private boolean isLoggedIn;
-    private boolean isRegistered;
     private List<Customer> followingMe;
     private List<Customer> followedByMe;
     private List<String> posts;
@@ -21,7 +19,6 @@ public class Customer {
 
     public Customer() {
         this.isLoggedIn = false;
-        this.isRegistered = false;
         this.followingMe = new Vector<>(); // todo- maybe other data structure ?
         this.followedByMe = new Vector<>(); // todo- maybe other data structure ?
         this.posts = new Vector<>();
@@ -53,21 +50,10 @@ public class Customer {
         return followedByMe;
     }
 
-    public List<String> getPosts() {
-        return posts;
-    }
-
-    public List<String> getPMs() {
-        return PMs;
-    }
-
     public int getConnectionID() {
         return connectionID;
     }
 
-    public boolean isRegistered() {
-        return isRegistered;
-    }
 
     //------------------setters--------------------------
 
@@ -83,28 +69,8 @@ public class Customer {
         isLoggedIn = loggedIn;
     }
 
-    public void setFollowingMe(List<Customer> followingMe) {
-        this.followingMe = followingMe;
-    }
-
-    public void setFollowedByMe(List<Customer> followedByMe) {
-        this.followedByMe = followedByMe;
-    }
-
-    public void setPosts(List<String> posts) {
-        this.posts = posts;
-    }
-
-    public void setPMs(List<String> PMs) {
-        this.PMs = PMs;
-    }
-
     public void setConnectionID(int connectionID) {
         this.connectionID = connectionID;
-    }
-
-    public void setRegistered(boolean registered) {
-        isRegistered = registered;
     }
 
     //-------------others---------------------------------

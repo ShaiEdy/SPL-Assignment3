@@ -6,7 +6,6 @@ import bgu.spl.net.api.bidi.BidiMessagingProtocolImpl;
 
 
 public class StatMessage extends Message {
-    private short opcode= 8;
     private String userName; // the user name of the user we want to get his status
 
     public StatMessage(byte[] messageBytesArray) {
@@ -30,7 +29,7 @@ public class StatMessage extends Message {
     @Override
     public Message act(BidiMessagingProtocolImpl protocol) {
         DataBase dataBase = protocol.getDataBase();
-        //Customer customer = protocol.getCustomer();
+
         if (!protocol.isLoggedIn() || dataBase.getUserNameToCustomer().get(userName) == null)
             return new ErrorMessage((short) 6); //if the sender is not logged in or the receiver is unRegistered we send error
         else {

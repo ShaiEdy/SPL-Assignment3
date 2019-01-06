@@ -5,19 +5,14 @@ import bgu.spl.net.api.DataBase;
 import bgu.spl.net.api.bidi.BidiMessagingProtocolImpl;
 
 import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class LogInMessage extends Message {
-    private short opcode= 2;
-    private int arrayLength;
     private int index = 2; // represents the index we are currently looking at. starts from 2 because we dont care about the Opcode.
     private String userName = "";
     private String password = "";
 
     public LogInMessage(byte[] messageBytesArray) {
         super((short) 2);
-
-        this.arrayLength = messageBytesArray.length;
 
         userName = appendToString(messageBytesArray, index);
         index = index + userName.length() + 1;
@@ -30,7 +25,6 @@ public class LogInMessage extends Message {
      * Used to make a String of all the bytes from messageBytesArray[index] to the first /0 in messageBytesArray.
      **/
     private String appendToString(byte[] messageBytesArray, int index) {
-        String toReturn = "";
         byte[] wordInByte;
         int counter = 0;
         int primaryIndex = index;
@@ -55,7 +49,8 @@ public class LogInMessage extends Message {
             if (!protocol.isLoggedIn()) { // if the protocol customer is not logged in already
                 Customer customerToLogIn = dataBase.getUserNameToCustomer().get(userName); // we get the customer that we should log in. notice that customer in the signature is not necesserily the actual customer and might be empty
                 if (!customerToLogIn.isLoggedIn() && customerToLogIn.getPassword().equals(password)) { // if other client didn't already logged in to it and the password is fine.
-                    synchronized (customerToLogIn) {
+                    //----dealing with notification "wait" to be send to a client that log in---//
+                    synchronized (customerToLogIn) { // sync for preventing post/pm to be sent while customer is log in
                         protocol.setLoggedIn(true);
                         customerToLogIn.setLoggedIn(true);
                         protocol.setUserName(customerToLogIn.getUserName());

@@ -8,7 +8,7 @@ import java.util.Vector;
 
 
 public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Message> { //T is message
-    private byte[] bytes = new byte[1 << 10]; //start with 1k //todo think
+    private byte[] bytes = new byte[2]; //1 << 10start with 1k //todo think
     private int len = 0;
     private short opcode = 0;
     private int countNumOfZeros = 0; // we will use this counter to count \0 bytes
@@ -105,7 +105,6 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Message> 
         if (len >= bytes.length) {
             bytes = Arrays.copyOf(bytes, len * 2);
         }
-
         bytes[len] = nextByte;
         len++;
     }
@@ -175,10 +174,6 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Message> 
     }
 
     private byte[] shortToBytes(short num) {
-        return getBytes(num);
-    }
-
-    public static byte[] getBytes(short num) {
         byte[] bytesArr = new byte[2];
         bytesArr[0] = (byte) ((num >> 8) & 0xFF);
         bytesArr[1] = (byte) (num & 0xFF);
@@ -186,10 +181,6 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Message> 
     }
 
     private byte[] merge2Arrays(byte[] arr1, byte[] arr2) {
-        return getBytes(arr1, arr2);
-    }
-
-    public static byte[] getBytes(byte[] arr1, byte[] arr2) {
         byte[] toReturn = new byte[arr1.length + arr2.length];
         int index = 0;
         for (byte b : arr1) {
