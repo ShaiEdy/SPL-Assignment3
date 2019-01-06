@@ -2,7 +2,7 @@ package bgu.spl.net.impl.messages;
 
 import bgu.spl.net.api.bidi.BidiMessagingProtocolImpl;
 
-public abstract class Message { //todo: check if we need to implement something? closeable?
+public abstract class Message {
     short opcode;
 
     public Message(short opcode) {

@@ -56,7 +56,7 @@ public class PMMessage extends Message {
             Customer thisCustomer = dataBase.getUserNameToCustomer().get(thisCustomerUserName);
 
             dataBase.getUserNameToCustomer().get(userNameToSendPM).addPM(content); //add to the receiver
-            thisCustomer.addPM(content); // add to the sender //todo think if content or this
+            thisCustomer.addPM(content); // add to the sender
             NotificationMessage notificationMessage = new NotificationMessage((byte) 0, thisCustomerUserName, content);
             Customer receivedCustomer = dataBase.getUserNameToCustomer().get(userNameToSendPM);
             synchronized (receivedCustomer) {
@@ -70,7 +70,6 @@ public class PMMessage extends Message {
                 }
             }
             return new AckMessage((short) 6, null);
-        // todo change to byte
         }
     }
 }

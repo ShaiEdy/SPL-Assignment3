@@ -56,7 +56,7 @@ public class PostMessage extends Message {
             NotificationMessage notificationMessage = new NotificationMessage((byte) 1, thisCustomerUserName, content);
             List<Customer> followingMe = thisCustomer.getFollowingMe(); // we get the "who is following me" Vector
             Vector<Customer> customersToSendNotificationToVector = new Vector<>(followingMe);
-            for (String userNameToSendNotificationTo : userToPost) { // we iterate //todo: Check if there might be a problem when iterating over the vector when some one else is try to follow me at the same time.
+            for (String userNameToSendNotificationTo : userToPost) { // we iterate //
                 Customer customerToSendNotificationTo = dataBase.getUserNameToCustomer().get(userNameToSendNotificationTo);
                 if (!customersToSendNotificationToVector.contains(customerToSendNotificationTo)) // we want to add him to the vector only if he is not already there. because we dont want someone to get two notifications.
                     customersToSendNotificationToVector.add(customerToSendNotificationTo);
@@ -76,6 +76,5 @@ public class PostMessage extends Message {
             return new AckMessage((short) 5, null);
         }
         return new ErrorMessage((short) 5);
-        //todo: remember to check if user is registered before sending message
     }
 }

@@ -103,7 +103,7 @@ public class NonBlockingConnectionHandler<T> implements ConnectionHandler<T> {
 
         if (writeQueue.isEmpty()) {
             if (protocol.shouldTerminate()) {
-                connections.disconnect(connectionId); //todo check if this is the write way (Shai added this todo).
+                connections.disconnect(connectionId);
                 close();
             }
             else reactor.updateInterestedOps(chan, SelectionKey.OP_READ);

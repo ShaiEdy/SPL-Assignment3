@@ -12,11 +12,10 @@ public abstract class BaseServer<T> implements Server<T> {
 
     private final int port;
     private final Supplier<BidiMessagingProtocol<T>> bidiProtocolFactory;
-    private final Supplier<MessageEncoderDecoder<T>> encdecFactory;// todo check if its ok you have here Message instade of T
+    private final Supplier<MessageEncoderDecoder<T>> encdecFactory;
     private ServerSocket sock;
     private ConnectionsImpl connections;
     private int connectionID; //Unique ID for each customer.
-    //todo- All posts should be saved to a data structure in the server, along with PM messages.  (not here maybe?)_
 
     public BaseServer(
             int port,

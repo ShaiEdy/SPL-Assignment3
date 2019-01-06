@@ -19,8 +19,8 @@ public class Customer {
 
     public Customer() {
         this.isLoggedIn = false;
-        this.followingMe = new Vector<>(); // todo- maybe other data structure ?
-        this.followedByMe = new Vector<>(); // todo- maybe other data structure ?
+        this.followingMe = new Vector<>();
+        this.followedByMe = new Vector<>();
         this.posts = new Vector<>();
         this.PMs = new Vector<>();
         this.connectionID = -1;
@@ -100,7 +100,7 @@ public class Customer {
     }
 
     public void addPM(String content) {
-        PMs.add(content); //todo think if content is enough or you want also the sender
+        PMs.add(content);
     }
 
     public void addPost(String content) {

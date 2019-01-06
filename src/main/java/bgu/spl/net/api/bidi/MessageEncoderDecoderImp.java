@@ -8,7 +8,7 @@ import java.util.Vector;
 
 
 public class MessageEncoderDecoderImp implements MessageEncoderDecoder<Message> { //T is message
-    private byte[] bytes = new byte[2]; //1 << 10start with 1k //todo think
+    private byte[] bytes = new byte[10];
     private int len = 0;
     private short opcode = 0;
     private int countNumOfZeros = 0; // we will use this counter to count \0 bytes

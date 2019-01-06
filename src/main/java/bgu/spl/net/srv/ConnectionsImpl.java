@@ -16,21 +16,23 @@ public class ConnectionsImpl<T> implements Connections<T> {
 
     public ConnectionsImpl() {
         this.idToConnectionHandler = new ConcurrentHashMap<>();
-        this.idToCustomer = new ConcurrentHashMap<>(); //  todo  delete the comment- need to be added here when someone do register
+        this.idToCustomer = new ConcurrentHashMap<>();
     }
 
     public void addNewConnection(int connectionId, ConnectionHandler CH) {
         idToConnectionHandler.put(connectionId, CH);
     }
 
-
     @Override
     @SuppressWarnings("unchecked")
     //send the msg to the CH with the given id
     public boolean send(int connectionId, T msg) {
         ConnectionHandler CH = idToConnectionHandler.get(connectionId);
-        CH.send(msg);
-        return false; //todo- think how to know if the send succeed or not
+        if (CH!= null) {
+            CH.send(msg);
+            return true;
+        }
+        else return false;
     }
 
     @Override

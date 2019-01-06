@@ -45,14 +45,13 @@ public class RegisterMessage extends Message {
         DataBase dataBase = protocol.getDataBase();
         synchronized (dataBase.getUserNameToCustomer()) { /// sync to prevent tow users that register with same name in the same time
             if (dataBase.getUserNameToCustomer().containsKey(userName) || protocol.isLoggedIn() /*|| customer.isRegistered()*/) //if customer was already registered.
-                return new ErrorMessage((short) 1); //todo: think if we handle correctly situation of two customers registering after each other.
+                return new ErrorMessage((short) 1);
 
             else { // if username is not already registered/
                 Customer customer = new Customer();
                 customer.setUserName(userName);
                 customer.setPassword(password);
                 dataBase.getUserNameToCustomer().put(userName, customer); // put it in the data map
-                //todo: do we need to think about problems caused by multiThreading? what if two clients register at the same time with the same user name?
                 return new AckMessage((short) 1, null);
             }
         }
