@@ -26,6 +26,7 @@ public class BidiMessagingProtocolImpl implements BidiMessagingProtocol<Message>
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void process(Message message) {
         // get a specific message that was created in encoder decoder
         //we use here the act messages of the messages for doing the specific process that needed

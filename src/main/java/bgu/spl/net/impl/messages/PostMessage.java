@@ -46,6 +46,7 @@ public class PostMessage extends Message {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Message act(BidiMessagingProtocolImpl protocol) {
         DataBase dataBase = protocol.getDataBase();
         if (protocol.isLoggedIn()) { // if customer is logged in

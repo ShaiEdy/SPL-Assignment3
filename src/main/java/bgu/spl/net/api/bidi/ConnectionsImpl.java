@@ -24,6 +24,7 @@ public class ConnectionsImpl implements Connections<Message> {
 
 
     @Override
+    @SuppressWarnings("unchecked")
     //send the msg to the CH with the given id
     public boolean send(int connectionId, Message msg) {
         ConnectionHandler CH = idToConnectionHandler.get(connectionId);
@@ -32,6 +33,7 @@ public class ConnectionsImpl implements Connections<Message> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     //send the broadcast to whoever registered
     public void broadcast(Message msg) {
         Set<Integer> idSet = idToConnectionHandler.keySet();

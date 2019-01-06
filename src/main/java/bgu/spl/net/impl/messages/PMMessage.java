@@ -45,6 +45,7 @@ public class PMMessage extends Message {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Message act(BidiMessagingProtocolImpl protocol) {
         DataBase dataBase = protocol.getDataBase();
 
