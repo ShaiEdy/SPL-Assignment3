@@ -64,9 +64,18 @@ public class PostMessage extends Message {
                 if (!customersToSendNotificationToVector.contains(customerToSendNotificationTo)) // we want to add him to the vector only if he is not already there. because we dont want someone to get two notifications.
                     customersToSendNotificationToVector.add(customerToSendNotificationTo);
             }
-            for (Customer customer : customersToSendNotificationToVector) {
+            for (Customer customerToSendNotification : customersToSendNotificationToVector) {
                 //todo syncrhonize on customer????
-                protocol.getConnections().send(customer.getConnectionID(), notificationMessage);
+                synchronized (customerToSendNotification) {
+                    if (customerToSendNotification.isLoggedIn())
+                        protocol.getConnections().send(customerToSendNotification.getConnectionID(), notificationMessage);
+                    else {
+                        if (dataBase.getNotificationsToBeSendInLogin().get(customerToSendNotification.getUserName()) == null) {
+                            dataBase.getNotificationsToBeSendInLogin().put(customerToSendNotification.getUserName(), new Vector<NotificationMessage>());
+                        }
+                        dataBase.getNotificationsToBeSendInLogin().get(customerToSendNotification.getUserName()).add(notificationMessage);
+                    }
+                }
             }
             //ConcurrentHashMap<String, Pair<NotificationMessage, Vector<Customer>>> userNameToNotificationSendList = dataBase.getUserNameToNotificationSendList(); // we get the map where we will put the customer that should be notified
             //userNameToNotificationSendList.put(thisCustomer.getUserName(), new Pair<>(notificationMessage, customersToSendNotificationToVector));

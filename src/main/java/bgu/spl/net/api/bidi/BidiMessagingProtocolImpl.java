@@ -42,7 +42,7 @@ public class BidiMessagingProtocolImpl implements BidiMessagingProtocol<Message>
         connections.send(connectionId,newMessage); // send ack/ error to the client
 
         //--------dealing with notification has to be send to list of customers------//
-        Pair<NotificationMessage, Vector<Customer> > notificationAndUsersVector= dataBase.getUserNameToNotificationSendList().get(userName);
+        /*Pair<NotificationMessage, Vector<Customer> > notificationAndUsersVector= dataBase.getUserNameToNotificationSendList().get(userName);
         if (notificationAndUsersVector!=null){ // the pair is exist (I caused notification)
             Vector<Customer> usersVector = notificationAndUsersVector.getValue(); // second
             NotificationMessage notificationMessage= notificationAndUsersVector.getKey(); // first
@@ -60,6 +60,7 @@ public class BidiMessagingProtocolImpl implements BidiMessagingProtocol<Message>
               }
             dataBase.getUserNameToNotificationSendList().remove(userName); //delete from the hash map the customer that sent notification and we already deal with, remove the key and the value (pair)
         }
+        */
         //----dealing with notification "wait" to be send to a client that log in---//
         if (message instanceof LogInMessage) {
             Vector<NotificationMessage> notificationMessageVector = dataBase.getNotificationsToBeSendInLogin().get(userName);

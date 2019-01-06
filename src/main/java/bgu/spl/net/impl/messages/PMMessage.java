@@ -62,11 +62,22 @@ public class PMMessage extends Message {
             dataBase.getUserNameToCustomer().get(userNameToSendPM).addPM(content); //add to the receiver
             thisCustomer.addPM(content); // add to the sender //todo think if content or this
             NotificationMessage notificationMessage = new NotificationMessage((byte) 0, thisCustomerUserName, content);
-            Vector<Customer> vectorOfReceivers = new Vector<>();
+            //Vector<Customer> vectorOfReceivers = new Vector<>();
             Customer receivedCustomer = dataBase.getUserNameToCustomer().get(userNameToSendPM);
-            vectorOfReceivers.add(receivedCustomer);
-            Pair<NotificationMessage, Vector<Customer>> pair = new Pair<>(notificationMessage, vectorOfReceivers);
-            dataBase.getUserNameToNotificationSendList().put(thisCustomerUserName, pair);
+            //todo sync::
+            synchronized (receivedCustomer) {
+                if (receivedCustomer.isLoggedIn())
+                    protocol.getConnections().send(receivedCustomer.getConnectionID(), notificationMessage);
+                else {
+                    if (dataBase.getNotificationsToBeSendInLogin().get(receivedCustomer.getUserName()) == null) {
+                        dataBase.getNotificationsToBeSendInLogin().put(receivedCustomer.getUserName(), new Vector<NotificationMessage>());
+                    }
+                    dataBase.getNotificationsToBeSendInLogin().get(receivedCustomer.getUserName()).add(notificationMessage);
+                }
+            }
+            //vectorOfReceivers.add(receivedCustomer);
+            //Pair<NotificationMessage, Vector<Customer>> pair = new Pair<>(notificationMessage, vectorOfReceivers);
+            //dataBase.getUserNameToNotificationSendList().put(thisCustomerUserName, pair);
             /// all this for creating notification that will be send by process of protocol
             return new AckMessage((short) 6, null);
         // todo change to byte

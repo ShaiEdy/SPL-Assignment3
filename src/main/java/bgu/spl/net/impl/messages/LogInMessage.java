@@ -4,6 +4,7 @@ import bgu.spl.net.api.Customer;
 import bgu.spl.net.api.DataBase;
 import bgu.spl.net.api.bidi.BidiMessagingProtocolImpl;
 
+import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class LogInMessage extends Message {
@@ -50,19 +51,26 @@ public class LogInMessage extends Message {
     @Override
     public Message act(BidiMessagingProtocolImpl protocol) {
         DataBase dataBase = protocol.getDataBase();
-        //Customer customer = protocol.getCustomer();
         if (dataBase.getUserNameToCustomer().containsKey(userName)) { //if customer is registered.
             if (!protocol.isLoggedIn()) { // if the protocol customer is not logged in already
-                //int connectionID = customer.getConnectionID(); // we want to keep the old connectionID and to not lose it.
                 Customer customerToLogIn = dataBase.getUserNameToCustomer().get(userName); // we get the customer that we should log in. notice that customer in the signature is not necesserily the actual customer and might be empty
                 if (!customerToLogIn.isLoggedIn() && customerToLogIn.getPassword().equals(password)) { // if other client didn't already logged in to it and the password is fine.
-                    protocol.setLoggedIn(true);
-                    //protocol.setCustomer(customerToLogIn);
-                    //customer = customerToLogIn; // we want the protocol's customer to be the actual one that is going to be logged in.
-                    //customer.setConnectionID(connectionID); //we want the connectionID to be the one that we received from the accept.
-                    customerToLogIn.setLoggedIn(true);
-                    protocol.setUserName(customerToLogIn.getUserName());
-                    customerToLogIn.setConnectionID(protocol.getConnectionId());
+                    synchronized (customerToLogIn) {
+                        protocol.setLoggedIn(true);
+                        customerToLogIn.setLoggedIn(true);
+                        protocol.setUserName(customerToLogIn.getUserName());
+                        customerToLogIn.setConnectionID(protocol.getConnectionId());
+
+                        Vector<NotificationMessage> notificationMessageVector = dataBase.getNotificationsToBeSendInLogin().get(userName);
+                        if (notificationMessageVector != null && !notificationMessageVector.isEmpty()) {
+                            //mean this client has notification "waiting" to be send to him
+                            for (NotificationMessage notificationMessage : notificationMessageVector) {
+                                protocol.getConnections().send(protocol.getConnectionId(), notificationMessage);
+                                //send the customer all the needed notification that waited
+                            }
+                            notificationMessageVector.clear();
+                        }
+                    }
                     return new AckMessage((short) 2, null);
                 }
             }
